@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <!-- Top Navigation Bar (VMOS Cloud Dashboard Header) -->
+    <!-- Top Dashboard Header -->
     <header class="dashboard-nav">
         <div class="nav-brand">
             <span class="logo-icon">☁️</span>
@@ -52,12 +52,12 @@
                         <span class="device-name" id="display-plan-name">Ultra Extreme VIP</span>
                     </div>
                     <div class="ping-info">
-                        <span>📶 5G | <strong>12 ms</strong></span>
+                        <span>📶 5G | <strong id="ping-text">12 ms</strong></span>
                     </div>
                 </div>
 
                 <!-- Screen Area -->
-                <div class="vmos-screen">
+                <div class="vmos-screen" id="vmos-screen">
                     
                     <!-- Boot Screen -->
                     <div id="boot-screen" class="boot-screen" style="display: none;">
@@ -70,37 +70,37 @@
                     <div id="android-home" class="android-home">
                         <div class="phone-top-bar">
                             <span id="phone-clock">12:00</span>
-                            <span class="icons">5G 🔋 100%</span>
+                            <span class="icons">5G 📶 100% 🔋</span>
                         </div>
 
                         <div class="widget-container">
                             <h1 id="home-widget-time">12:00</h1>
-                            <p>พหัสบดี, 10 ตุลาคม</p>
+                            <p>วันอาทิตย์, 11 ตุลาคม</p>
                         </div>
 
                         <!-- App Grid -->
                         <div class="app-grid">
-                            <div class="app-icon-wrapper" onclick="openApp('Google Play Store')">
+                            <div class="app-icon-wrapper" onclick="openApp('playstore')">
                                 <div class="app-icon store">▶</div>
                                 <span>Play Store</span>
                             </div>
-                            <div class="app-icon-wrapper" onclick="openApp('Chrome Browser')">
+                            <div class="app-icon-wrapper" onclick="openApp('chrome')">
                                 <div class="app-icon chrome">🌐</div>
                                 <span>Chrome</span>
                             </div>
-                            <div class="app-icon-wrapper" onclick="openApp('Game Center / ROV')">
+                            <div class="app-icon-wrapper" onclick="openApp('games')">
                                 <div class="app-icon game">🎮</div>
                                 <span>Game Center</span>
                             </div>
-                            <div class="app-icon-wrapper" onclick="openApp('File Manager')">
+                            <div class="app-icon-wrapper" onclick="openApp('files')">
                                 <div class="app-icon files">📁</div>
                                 <span>Files</span>
                             </div>
-                            <div class="app-icon-wrapper" onclick="openApp('Magisk Root')">
+                            <div class="app-icon-wrapper" onclick="openApp('magisk')">
                                 <div class="app-icon root">🛡️</div>
                                 <span>Magisk</span>
                             </div>
-                            <div class="app-icon-wrapper" onclick="openApp('VMOS Settings')">
+                            <div class="app-icon-wrapper" onclick="openApp('settings')">
                                 <div class="app-icon settings">⚙️</div>
                                 <span>Settings</span>
                             </div>
@@ -114,11 +114,74 @@
                         </div>
                     </div>
 
+                    <!-- ================= INTERACTIVE APP VIEWS ================= -->
+
+                    <!-- 1. Play Store UI -->
+                    <div id="app-playstore" class="app-view" style="display: none;">
+                        <div class="app-header-bar">
+                            <span class="app-back-btn" onclick="goHome()">&larr;</span>
+                            <h3>Google Play Store</h3>
+                        </div>
+                        <div class="app-content-scroll">
+                            <div class="store-search">🔍 ค้นหาแอปและเกม</div>
+                            <div class="store-section-title">แนะนำสำหรับคุณ</div>
+                            <div class="store-app-row">
+                                <div class="store-app-icon" style="background:#01875f;">🎮</div>
+                                <div class="store-app-info">
+                                    <h4>ROV: Mobile MOBA</h4>
+                                    <p>Action • 150 MB</p>
+                                </div>
+                                <button class="install-btn" onclick="alert('ติดตั้งแอปสำเร็จ!')">ติดตั้ง</button>
+                            </div>
+                            <div class="store-app-row">
+                                <div class="store-app-icon" style="background:#2563eb;">⛏️</div>
+                                <div class="store-app-info">
+                                    <h4>Minecraft Java Mobile</h4>
+                                    <p>Simulation • 450 MB</p>
+                                </div>
+                                <button class="install-btn" onclick="alert('ติดตั้งแอปสำเร็จ!')">ติดตั้ง</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Chrome Browser UI -->
+                    <div id="app-chrome" class="app-view" style="display: none;">
+                        <div class="app-header-bar chrome-bar">
+                            <span class="app-back-btn" onclick="goHome()">&larr;</span>
+                            <input type="text" class="url-input" value="https://www.google.com" readonly>
+                        </div>
+                        <div class="app-content-scroll chrome-body">
+                            <h2>Google</h2>
+                            <div class="google-search-box">พิมพ์ URL หรือค้นหาข้อความ...</div>
+                            <div class="quick-links">
+                                <div class="q-link" onclick="alert('กำลังเปิด YouTube บนคลาวด์')">▶ YouTube</div>
+                                <div class="q-link" onclick="alert('กำลังเปิด GitHub')">🐙 GitHub</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Settings UI -->
+                    <div id="app-settings" class="app-view" style="display: none;">
+                        <div class="app-header-bar">
+                            <span class="app-back-btn" onclick="goHome()">&larr;</span>
+                            <h3>Settings</h3>
+                        </div>
+                        <div class="app-content-scroll settings-body">
+                            <div class="settings-group">
+                                <h4>System Information</h4>
+                                <div class="setting-row"><span>Android Version</span> <strong>Android 14</strong></div>
+                                <div class="setting-row"><span>Virtual RAM</span> <strong style="color:#38bdf8;">24 GB LPDDR5X</strong></div>
+                                <div class="setting-row"><span>vCPU Cores</span> <strong style="color:#38bdf8;">8 Cores Flagship</strong></div>
+                                <div class="setting-row"><span>Root Status</span> <strong style="color:#10b981;">Granted (Magisk)</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Hardware Control Sidebar (Right) -->
                 <div class="vmos-sidebar">
-                    <button class="side-btn" onclick="triggerNav('home')" title="Home">🏠</button>
+                    <button class="side-btn" onclick="goHome()" title="Home">🏠</button>
                     <button class="side-btn" onclick="triggerNav('back')" title="Back">↩️</button>
                     <button class="side-btn" onclick="triggerNav('recent')" title="Recents">📑</button>
                     <div class="divider"></div>
@@ -142,54 +205,4 @@
             </div>
 
             <div class="plans-grid">
-                <div class="plan-card" onclick="selectPlan(this, 'Standard Cloud', '4 vCPU', '8 GB RAM', '350')">
-                    <h3>Standard Cloud</h3>
-                    <div class="plan-price">฿350 <span>/เดือน</span></div>
-                    <ul class="plan-specs">
-                        <li>⚡ 4 Cores vCPU</li>
-                        <li>🧠 8 GB RAM</li>
-                        <li>💾 128 GB Storage</li>
-                    </ul>
-                    <button class="select-btn">เลือกแพ็กเกจ</button>
-                </div>
-
-                <div class="plan-card" onclick="selectPlan(this, 'Pro Gaming', '8 vCPU', '16 GB RAM', '750')">
-                    <h3>Pro Gaming</h3>
-                    <div class="plan-price">฿750 <span>/เดือน</span></div>
-                    <ul class="plan-specs">
-                        <li>⚡ 8 Cores vCPU</li>
-                        <li>🧠 16 GB RAM</li>
-                        <li>💾 256 GB Storage</li>
-                    </ul>
-                    <button class="select-btn">เลือกแพ็กเกจ</button>
-                </div>
-
-                <div class="plan-card active" onclick="selectPlan(this, 'Ultra Extreme VIP', '8 vCPU High-Clock', '24 GB RAM', '0')">
-                    <div class="plan-badge">แนะนำ / VIP ฟรี</div>
-                    <h3>Ultra Extreme</h3>
-                    <div class="plan-price" id="price-display">฿1,200 <span>/เดือน</span></div>
-                    <ul class="plan-specs">
-                        <li>⚡ Flagship 8 Cores</li>
-                        <li>🧠 24 GB LPDDR5X RAM</li>
-                        <li>🛡️ Root & Anti-Detect เปิดใช้งาน</li>
-                    </ul>
-                    <button class="select-btn">เลือกแพ็กเกจ</button>
-                </div>
-            </div>
-
-            <button id="buy-btn" class="confirm-btn" onclick="confirmSubscription()">🚀 บูตและเข้าสู่ระบบ Cloud Phone</button>
-        </div>
-    </div>
-
-    <!-- App Modal Popup (จำลองเปิดแอป) -->
-    <div id="app-modal" class="modal-backdrop" style="display: none;">
-        <div class="modal-card" style="max-width: 400px; text-align: center;">
-            <h3 id="app-title" style="color: #38bdf8; margin-bottom: 15px;">App Running</h3>
-            <p id="app-desc" style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">กำลังจำลองการทำงานภายในสภาพแวดล้อมคลาวด์...</p>
-            <button class="confirm-btn" onclick="closeAppModal()" style="padding: 8px 20px;">ปิดหน้าต่าง</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+                <div class="plan-card" onclick="selectPlan(this, 'Standard Cloud',
