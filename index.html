@@ -3,28 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VMOS Cloud OS - Flagship Edition</title>
-    <link rel="stylesheet" href="star.css">
+    <title>VMOS Cloud Pro - Flagship Virtual System</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- หน้าต่างยืนยันตัวตน VIP & บูตระบบ -->
-    <div id="plan-modal" class="modal-backdrop">
+    <!-- 1. หน้าจอสมัครสมาชิก (Register) -->
+    <div id="auth-register-modal" class="modal-backdrop">
         <div class="modal-card">
-            <h2>☁️ VMOS Cloud Phone - Secure Gateway</h2>
-            <p class="modal-subtitle">ระบบจำลองสมาร์ตโฟน Android 14 พร้อม PojavLauncher & Roblox Delta</p>
-
-            <div class="vip-input-group">
-                <label for="user-email">ยืนยันตัวตนบัญชีผู้ใช้ (VIP Access):</label>
-                <input type="email" id="user-email" placeholder="พิมพ์อีเมล เช่น oop280712@gmail.com" />
-                <span id="vip-status-msg" class="vip-msg"></span>
+            <h2>☁️ สมัครสมาชิก VMOS Cloud</h2>
+            <p class="modal-subtitle">สร้างบัญชีผู้ใช้ใหม่เพื่อเริ่มต้นใช้งาน Cloud Phone</p>
+            <div class="auth-form">
+                <div class="vip-input-group">
+                    <label>อีเมล:</label>
+                    <input type="email" id="reg-email" placeholder="ระบุอีเมลของคุณ">
+                </div>
+                <div class="vip-input-group">
+                    <label>รหัสผ่าน:</label>
+                    <input type="password" id="reg-pass" placeholder="••••••••">
+                </div>
+                <button class="confirm-btn" onclick="handleRegister()">📝 ลงทะเบียนบัญชี</button>
+                <p class="auth-switch-text" onclick="switchAuthTo('login')">มีบัญชีอยู่แล้ว? <a>เข้าสู่ระบบ</a></p>
             </div>
+        </div>
+    </div>
 
+    <!-- 2. หน้าจอเข้าสู่ระบบ + Google Login -->
+    <div id="auth-login-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-card">
+            <h2>☁️ เข้าสู่ระบบ VMOS Cloud</h2>
+            <p class="modal-subtitle">เข้าสู่ระบบเพื่อจัดการเครื่องจำลองคลาวด์ของคุณ</p>
+            <div class="auth-form">
+                <div class="vip-input-group">
+                    <label>อีเมล:</label>
+                    <input type="email" id="login-email" placeholder="เช่น oop280712@gmail.com">
+                </div>
+                <div class="vip-input-group">
+                    <label>รหัสผ่าน:</label>
+                    <input type="password" id="login-pass" placeholder="••••••••">
+                </div>
+                <button class="confirm-btn" onclick="handleLogin()">🔐 เข้าสู่ระบบ</button>
+                <div class="divider-text">หรือเชื่อมต่อด่วน</div>
+                <button class="google-login-btn" onclick="handleGoogleLogin()">
+                    <span class="g-icon">G</span> เข้าสู่ระบบด้วย Google Account
+                </button>
+                <p class="auth-switch-text" onclick="switchAuthTo('register')">ยังไม่มีบัญชี? <a>สมัครสมาชิก</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. หน้าจอเลือกแพ็กเกจและระยะเวลาเช่า -->
+    <div id="plan-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-card">
+            <h2>☁️ เลือกแพ็กเกจและระยะเวลาเช่า Cloud Phone</h2>
+            <p class="modal-subtitle" id="user-welcome-sub">กำลังตรวจสอบสิทธิ์บัญชีผู้ใช้...</p>
             <div class="plans-grid">
                 <div class="plan-card active">
-                    <div class="plan-badge">VIP / ฟรี</div>
-                    <h3>Ultra Extreme</h3>
-                    <div class="plan-price"><span style="color:#10b981;">FREE (VIP)</span></div>
+                    <div class="plan-badge" id="plan-badge-text">VIP / ฟรี</div>
+                    <h3 id="plan-title-text">Ultra Extreme</h3>
+                    <div class="plan-price" id="price-display"><span style="color:#10b981;">FREE (VIP)</span></div>
                     <ul class="plan-specs">
                         <li>⚡ 8 Cores Flagship vCPU</li>
                         <li>🧠 24 GB LPDDR5X RAM</li>
@@ -32,12 +69,19 @@
                     </ul>
                 </div>
             </div>
-
-            <button class="confirm-btn" onclick="confirmSubscription()">🚀 เปิดใช้งาน Cloud Phone</button>
+            <div class="vip-input-group" style="text-align: left; margin-bottom: 16px;">
+                <label>เลือกระยะเวลาการเช่าเครื่อง:</label>
+                <select id="rental-duration" class="rental-select">
+                    <option value="1">1 เดือน (Standard)</option>
+                    <option value="3">3 เดือน (ประหยัด 10%)</option>
+                    <option value="12" selected>1 ปี (VIP Unlimited / คุ้มที่สุด)</option>
+                </select>
+            </div>
+            <button class="confirm-btn" onclick="confirmSubscription()">💳 ยืนยันการสั่งซื้อและเริ่มใช้งานทันที</button>
         </div>
     </div>
 
-    <!-- กรอบสมาร์ตโฟนเสมือนจริง -->
+    <!-- 4. หน้าจอสมาร์ตโฟนเสมือนจริง (VMOS Cloud Phone UI) -->
     <div class="phone-frame">
         <div class="vmos-container">
             
@@ -68,7 +112,7 @@
                         <p id="home-widget-date">วันอาทิตย์, 11 ตุลาคม</p>
                     </div>
 
-                    <!-- ตารางแอปพลิเคชัน (รวม Pojav & Delta & APK Installer) -->
+                    <!-- ตารางแอปพลิเคชัน -->
                     <div class="app-grid">
                         <div class="app-icon-wrapper" onclick="openApp('pojav')">
                             <div class="app-icon pojav">⛏️</div>
@@ -98,26 +142,26 @@
 
                     <!-- Dock ด้านล่าง -->
                     <div class="android-dock">
-                        <div class="app-icon-wrapper" onclick="openApp('pojav')"><div class="app-icon pojav" style="width:40px;height:40px;font-size:16px;">⛏️</div></div>
-                        <div class="app-icon-wrapper" onclick="openApp('delta')"><div class="app-icon delta" style="width:40px;height:40px;font-size:16px;">Δ</div></div>
-                        <div class="app-icon-wrapper" onclick="openApp('installer')"><div class="app-icon apk" style="width:40px;height:40px;font-size:16px;">📦</div></div>
-                        <div class="app-icon-wrapper" onclick="openApp('settings')"><div class="app-icon settings" style="width:40px;height:40px;font-size:16px;">⚙️</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('pojav')"><div class="app-icon pojav" style="width:38px;height:38px;font-size:16px;">⛏️</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('delta')"><div class="app-icon delta" style="width:38px;height:38px;font-size:16px;">Δ</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('installer')"><div class="app-icon apk" style="width:38px;height:38px;font-size:16px;">📦</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('settings')"><div class="app-icon settings" style="width:38px;height:38px;font-size:16px;">⚙️</div></div>
                     </div>
                 </div>
 
-                <!-- ================= UI ของแอปพิเศษ ================= -->
+                <!-- ================= UI ภายในแอปพลิเคชัน ================= -->
 
-                <!-- 1. PojavLauncher UI -->
+                <!-- 1. PojavLauncher -->
                 <div id="app-pojav" class="app-view" style="display: none;">
                     <div class="app-header-bar" style="background:#5c4033;">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>PojavLauncher (Java Edition)</h3>
+                        <h3>PojavLauncher</h3>
                     </div>
                     <div class="app-content-scroll" style="background:#2b2b2b; text-align:center; padding-top:20px;">
-                        <div style="font-size:40px; margin-bottom:10px;">🟩🟫</div>
-                        <h3 style="color:#fff; margin-bottom:15px;">Minecraft Java 1.20.4</h3>
-                        <p style="color:#aaa; font-size:11px; margin-bottom:20px;">RAM Allocated: <strong>8192 MB (24 GB Pool)</strong></p>
-                        <div style="background:#3c3c3c; padding:10px; border-radius:8px; margin-bottom:15px; text-align:left; font-family:monospace; font-size:11px; color:#0f0;">
+                        <div style="font-size:36px; margin-bottom:10px;">🟩🟫</div>
+                        <h3 style="color:#fff; margin-bottom:10px;">Minecraft Java 1.20.4</h3>
+                        <p style="color:#aaa; font-size:11px; margin-bottom:15px;">RAM Allocated: 8192 MB (24 GB Pool)</p>
+                        <div style="background:#3c3c3c; padding:10px; border-radius:8px; margin-bottom:15px; text-align:left; font-family:monospace; font-size:10px; color:#0f0;">
                             [Info] Logged in as: Steve (Offline)<br>
                             [Info] Renderer: OpenGL ES 3.2<br>
                             [Ready] Click Play to Launch Game
@@ -126,77 +170,20 @@
                     </div>
                 </div>
 
-                <!-- 2. Roblox Delta Executor UI -->
+                <!-- 2. Roblox Delta -->
                 <div id="app-delta" class="app-view" style="display: none;">
                     <div class="app-header-bar" style="background:#111; border-bottom:1px solid #333;">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3 style="color:#a855f7;">Delta Executor (Roblox)</h3>
+                        <h3 style="color:#a855f7;">Delta Executor</h3>
                     </div>
                     <div class="app-content-scroll" style="background:#09090b; display:flex; flex-direction:column; padding:12px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                            <span style="font-size:11px; color:#a855f7; font-weight:bold;">Lua Execution Script Hub</span>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:11px; color:#a855f7; font-weight:bold;">Script Hub</span>
                             <span style="font-size:10px; background:#18181b; padding:2px 8px; border-radius:4px; color:#10b981;">● Connected</span>
                         </div>
-                        <textarea id="delta-script" style="flex:1; background:#18181b; color:#a78bfa; border:1px solid #27272a; border-radius:8px; padding:10px; font-family:monospace; font-size:11px; resize:none; outline:none; min-height:150px;">-- Delta Executor v2.5.4
-print("Delta Mobile Initialized successfully!");
--- Paste your Lua script below:
+                        <textarea id="delta-script" style="flex:1; background:#18181b; color:#a78bfa; border:1px solid #27272a; border-radius:8px; padding:8px; font-family:monospace; font-size:11px; resize:none; outline:none; min-height:140px;">-- Delta Executor v2.5.4
+print("Delta Mobile Initialized!");
 loadstring(game:HttpGet("https://raw.githubusercontent.com/..."))()</textarea>
-                        <div style="display:flex; gap:8px; margin-top:10px;">
+                        <div style="display:flex; gap:8px; margin-top:8px;">
                             <button class="confirm-btn" onclick="alert('⚡ Execute Script สำเร็จ!')" style="background:#7c3aed; flex:1; padding:8px;">Execute</button>
-                            <button class="confirm-btn" onclick="document.getElementById('delta-script').value=''" style="background:#27272a; color:#fff; padding:8px;">Clear</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. APK Installer UI (ระบบติดตั้งไฟล์ .apk) -->
-                <div id="app-installer" class="app-view" style="display: none;">
-                    <div class="app-header-bar" style="background:#0284c7;">
-                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>APK Installer & Package Manager</h3>
-                    </div>
-                    <div class="app-content-scroll" style="text-align:center; padding-top:30px;">
-                        <div style="font-size:50px; margin-bottom:10px;">📥</div>
-                        <h3 style="margin-bottom:10px;">ติดตั้งแอปพลิเคชันภายนอก (.apk)</h3>
-                        <p style="color:#94a3b8; font-size:11px; margin-bottom:20px;">เลือกไฟล์ APK จากเครื่องจำลองของคุณเพื่อทำการติดตั้งด่วน</p>
-                        
-                        <div style="border: 2px dashed #334155; border-radius: 12px; padding: 20px; background: #1e293b; margin-bottom: 20px; cursor: pointer;" onclick="simulateInstall()">
-                            <p style="font-size: 12px; color: #38bdf8;">📂 แตะเพื่อเลือกไฟล์ .apk (จำลอง)</p>
-                            <span id="install-file-name" style="font-size: 10px; color: #64748b; display: block; margin-top: 6px;">ยังไม่ได้เลือกไฟล์</span>
-                        </div>
-
-                        <button id="install-action-btn" class="confirm-btn" onclick="executeInstall()" style="display:none; background:#0284c7;">เริ่มติดตั้งแพ็กเกจ</button>
-                    </div>
-                </div>
-
-                <!-- 4. Settings -->
-                <div id="app-settings" class="app-view" style="display: none;">
-                    <div class="app-header-bar">
-                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>Settings</h3>
-                    </div>
-                    <div class="app-content-scroll settings-body">
-                        <div class="settings-group">
-                            <h4>Device Information</h4>
-                            <div class="setting-row"><span>Model</span> <strong>VMOS Cloud Ultra-X</strong></div>
-                            <div class="setting-row"><span>Android Version</span> <strong>Android 14 (API 34)</strong></div>
-                            <div class="setting-row"><span>RAM Status</span> <strong style="color:#10b981;">24 GB LPDDR5X</strong></div>
-                            <div class="setting-row"><span>Custom Launchers</span> <strong style="color:#38bdf8;">Pojav & Delta Active</strong></div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Android Navigation Bar -->
-            <div class="android-navbar">
-                <span onclick="triggerNav('recent')">⬛</span>
-                <span onclick="goHome()">⌂</span>
-                <span onclick="goHome()">‹</span>
-            </div>
-
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+                            <button class="confirm-btn" onclick="document
