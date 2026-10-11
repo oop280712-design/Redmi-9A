@@ -1,51 +1,70 @@
 const VIP_EMAILS = ["oop280712@gmail.com", "sawat2823@gmail.com"];
+let loggedInUserEmail = "";
 
-let currentPlan = {
-    name: "Ultra Extreme VIP",
-    specs: "24 GB RAM / 8 vCPU",
-    price: "0"
-};
-
-// ตรวจสอบอีเมล VIP Real-time
-document.getElementById('user-email').addEventListener('input', (e) => {
-    const email = e.target.value.trim().toLowerCase();
-    const msg = document.getElementById('vip-status-msg');
-    const priceDisplay = document.getElementById('price-display');
-    const badge = document.getElementById('nav-vip-badge');
-    const emailText = document.getElementById('nav-email-text');
-
-    if (VIP_EMAILS.includes(email)) {
-        msg.textContent = "✨ ตรวจพบสิทธิ์ VIP! ใช้งานแพ็กเกจ Ultra Extreme ฟรีทันที";
-        msg.style.color = "#10b981";
-        priceDisplay.innerHTML = "<s>฿1,200</s> <span style='color: #10b981;'>FREE (VIP)</span>";
-        badge.textContent = "VIP EXTREME";
-        badge.style.background = "linear-gradient(135deg, #10b981, #059669)";
-        emailText.textContent = email;
+function switchAuthTo(target) {
+    if (target === 'login') {
+        document.getElementById('auth-register-modal').style.display = 'none';
+        document.getElementById('auth-login-modal').style.display = 'flex';
     } else {
-        msg.textContent = "";
-        priceDisplay.innerHTML = "฿1,200 <span>/เดือน</span>";
-        badge.textContent = "Standard User";
-        badge.style.background = "linear-gradient(135deg, #f59e0b, #d97706)";
-        emailText.textContent = email ? email : "ยังไม่ได้เข้าสู่ระบบ";
+        document.getElementById('auth-login-modal').style.display = 'none';
+        document.getElementById('auth-register-modal').style.display = 'flex';
     }
-});
-
-function selectPlan(card, name, cpu, ram, price) {
-    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
-    card.classList.add('active');
-    currentPlan = { name, specs: `${ram} / ${cpu}`, price };
 }
 
-function openModal() {
+function handleRegister() {
+    const email = document.getElementById('reg-email').value.trim();
+    if (!email) {
+        alert("กรุณากรอกอีเมลก่อนสมัครสมาชิก");
+        return;
+    }
+    alert("📝 สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ");
+    switchAuthTo('login');
+}
+
+function handleLogin() {
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    if (!email) {
+        alert("กรุณากรอกอีเมลเพื่อเข้าสู่ระบบ");
+        return;
+    }
+    proceedToPlanSelection(email);
+}
+
+function handleGoogleLogin() {
+    let email = prompt("🔗 จำลองหน้าต่าง Google Sign-In\nกรุณากรอกอีเมล Google ของคุณ:");
+    if (!email) return;
+    email = email.trim().toLowerCase();
+    proceedToPlanSelection(email);
+}
+
+function proceedToPlanSelection(email) {
+    loggedInUserEmail = email;
+    const isVip = VIP_EMAILS.includes(email);
+
+    document.getElementById('auth-login-modal').style.display = 'none';
+    document.getElementById('auth-register-modal').style.display = 'none';
     document.getElementById('plan-modal').style.display = 'flex';
+
+    const subText = document.getElementById('user-welcome-sub');
+    const badgeText = document.getElementById('plan-badge-text');
+    const priceDisplay = document.getElementById('price-display');
+
+    if (isVip) {
+        subText.textContent = `✨ ยินดีต้อนรับคุณ ${email} (ตรวจพบสิทธิ์ VIP ฟรีตลอดชีพ)`;
+        badgeText.textContent = "VIP / ฟรีตลอดชีพ";
+        priceDisplay.innerHTML = `<span style="color:#10b981;">FREE (VIP Verified)</span>`;
+    } else {
+        subText.textContent = `ยินดีต้อนรับคุณ ${email} (Standard User)`;
+        badgeText.textContent = "Standard Cloud";
+        priceDisplay.innerHTML = `฿1,200 <span>/เดือน</span>`;
+    }
+
+    document.getElementById('settings-user-email').textContent = email;
 }
 
 function confirmSubscription() {
-    const email = document.getElementById('user-email').value.trim().toLowerCase();
-    const isVip = VIP_EMAILS.includes(email);
-
+    const duration = document.getElementById('rental-duration').value;
     document.getElementById('plan-modal').style.display = 'none';
-    document.getElementById('display-plan-name').textContent = currentPlan.name;
 
     const bootScreen = document.getElementById('boot-screen');
     const bootStatus = document.getElementById('boot-status');
@@ -54,56 +73,69 @@ function confirmSubscription() {
     bootScreen.style.display = 'flex';
     homeScreen.style.display = 'none';
 
-    setTimeout(() => {
-        bootStatus.textContent = isVip ? "🔓 Bypassing Cloud Security & Root..." : "Allocating Hardware Resources...";
-    }, 1200);
-
-    setTimeout(() => {
-        bootStatus.textContent = "Starting VMOS Android 14 Container...";
-    }, 2500);
+    setTimeout(() => { bootStatus.textContent = `Allocating 24 GB RAM for ${duration} Month(s)...`; }, 1000);
+    setTimeout(() => { bootStatus.textContent = "Launching Android 14 Cloud System..."; }, 2200);
 
     setTimeout(() => {
         bootScreen.style.display = 'none';
         homeScreen.style.display = 'flex';
         updateClock();
-    }, 4000);
-}
-
-function rebootInstance() {
-    confirmSubscription();
-}
-
-function powerOff() {
-    document.getElementById('android-home').style.display = 'none';
-    const bootScreen = document.getElementById('boot-screen');
-    bootScreen.style.display = 'flex';
-    document.getElementById('boot-status').textContent = "Instance Powered Off.";
+    }, 3500);
 }
 
 function updateClock() {
     const now = new Date();
     const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-    document.getElementById('phone-clock').textContent = timeStr;
+    document.getElementById('status-time').textContent = timeStr;
     document.getElementById('home-widget-time').textContent = timeStr;
 }
 setInterval(updateClock, 1000);
 
-function openApp(appName) {
-    document.getElementById('app-title').textContent = appName;
-    document.getElementById('app-desc').textContent = `กำลังจำลองการทำงานของแอป ${appName} บนสเปก ${currentPlan.specs} อย่างเต็มรูปแบบ`;
-    document.getElementById('app-modal').style.display = 'flex';
+function hideAllApps() {
+    document.querySelectorAll('.app-view').forEach(app => app.style.display = 'none');
 }
 
-function closeAppModal() {
-    document.getElementById('app-modal').style.display = 'none';
+function openApp(appId) {
+    hideAllApps();
+    const target = document.getElementById(`app-${appId}`);
+    if (target) target.style.display = 'flex';
+}
+
+function goHome() {
+    hideAllApps();
+}
+
+function simulateInstall() {
+    const apkNames = ["Roblox_Delta_v2.5.apk", "Minecraft_Java_Mod.apk", "Executor_Helper.apk"];
+    const chosen = apkNames[Math.floor(Math.random() * apkNames.length)];
+    document.getElementById('install-file-name').textContent = chosen;
+    document.getElementById('install-action-btn').style.display = 'block';
+}
+
+function executeInstall() {
+    const btn = document.getElementById('install-action-btn');
+    btn.textContent = "กำลังติดตั้ง APK...";
+    setTimeout(() => {
+        btn.textContent = "ติดตั้งสำเร็จ!";
+        alert("📦 ติดตั้งแอปพลิเคชันลงใน Cloud Phone สำเร็จเรียบร้อยแล้ว!");
+        goHome();
+    }, 1200);
+}
+
+function installApp(appKey, appName) {
+    const btn = document.getElementById(`btn-${appKey}`);
+    btn.textContent = "กำลังติดตั้ง...";
+    setTimeout(() => {
+        btn.textContent = "เปิดใช้งาน";
+        btn.classList.add('installed');
+        alert(`ติดตั้งแอป ${appName} สำเร็จแล้ว!`);
+    }, 1200);
 }
 
 function triggerNav(action) {
-    if (action === 'home') {
-        document.getElementById('android-home').style.display = 'flex';
-    } else if (action === 'back') {
-        alert('↩️ ปุ่มย้อนกลับ (Back Triggered)');
-    } else if (action === 'recent') {
-        alert('📑 เปิดหน้าแอปพลิเคชันล่าสุด (Recent Apps)');
+    if (action === 'recent') {
+        alert('📑 เปิดหน้าแอปพลิเคชันล่าสุด (Recents)');
+    } else {
+        goHome();
     }
 }
