@@ -94,6 +94,7 @@ setInterval(updateClock, 1000);
 
 function hideAllApps() {
     document.querySelectorAll('.app-view').forEach(app => app.style.display = 'none');
+    document.getElementById('ninja-executor').style.display = 'none';
 }
 
 function openApp(appId) {
@@ -104,6 +105,21 @@ function openApp(appId) {
 
 function goHome() {
     hideAllApps();
+}
+
+// กดเข้าแมพ Roblox แล้วจะมีตัวรันนินจาเด้งขึ้นมา
+function enterRobloxGame() {
+    alert("🎮 กำลังโหลดเข้าสู่แมพ Roblox...");
+    document.getElementById('ninja-executor').style.display = 'block';
+}
+
+function toggleNinjaMenu() {
+    const body = document.getElementById('ninja-body');
+    if (body.style.display === 'none') {
+        body.style.display = 'block';
+    } else {
+        body.style.display = 'none';
+    }
 }
 
 function installApp(appKey, appName) {
