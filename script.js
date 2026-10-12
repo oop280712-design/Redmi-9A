@@ -13,11 +13,12 @@ function switchAuthTo(target) {
 
 function handleRegister() {
     const email = document.getElementById('reg-email').value.trim();
-    if (!email) {
-        alert("กรุณากรอกอีเมลก่อนสมัครสมาชิก");
+    const pass = document.getElementById('reg-pass').value.trim();
+    if (!email || !pass) {
+        alert("กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน");
         return;
     }
-    alert("📝 สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ");
+    alert("📝 ลงทะเบียนบัญชีสำเร็จ! กรุณาเข้าสู่ระบบ");
     switchAuthTo('login');
 }
 
@@ -103,23 +104,6 @@ function openApp(appId) {
 
 function goHome() {
     hideAllApps();
-}
-
-function simulateInstall() {
-    const apkNames = ["Roblox_Delta_v2.5.apk", "Minecraft_Java_Mod.apk", "Executor_Helper.apk"];
-    const chosen = apkNames[Math.floor(Math.random() * apkNames.length)];
-    document.getElementById('install-file-name').textContent = chosen;
-    document.getElementById('install-action-btn').style.display = 'block';
-}
-
-function executeInstall() {
-    const btn = document.getElementById('install-action-btn');
-    btn.textContent = "กำลังติดตั้ง APK...";
-    setTimeout(() => {
-        btn.textContent = "ติดตั้งสำเร็จ!";
-        alert("📦 ติดตั้งแอปพลิเคชันลงใน Cloud Phone สำเร็จเรียบร้อยแล้ว!");
-        goHome();
-    }, 1200);
 }
 
 function installApp(appKey, appName) {
