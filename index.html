@@ -65,7 +65,7 @@
                     <ul class="plan-specs">
                         <li>⚡ 8 Cores Flagship vCPU</li>
                         <li>🧠 24 GB LPDDR5X RAM</li>
-                        <li>🛡️ PojavLauncher & Delta Pre-installed</li>
+                        <li>🛡️ Root Access & High Performance</li>
                     </ul>
                 </div>
             </div>
@@ -81,7 +81,7 @@
         </div>
     </div>
 
-    <!-- 4. หน้าจอสมาร์ตโฟนเสมือนจริง (VMOS Cloud Phone UI) -->
+    <!-- 4. หน้าจอสมาร์ตโฟนเสมือนจริง (VMOS Cloud Phone UI ระดับพรีเมียม) -->
     <div class="phone-frame">
         <div class="vmos-container">
             
@@ -109,23 +109,11 @@
                 <div id="android-home" class="android-home">
                     <div class="widget-container">
                         <h1 id="home-widget-time">12:00</h1>
-                        <p id="home-widget-date">วันอาทิตย์, 11 ตุลาคม</p>
+                        <p id="home-widget-date">วันจันทร์, 12 ตุลาคม</p>
                     </div>
 
-                    <!-- ตารางแอปพลิเคชัน -->
+                    <!-- ตารางแอปพลิเคชันมาตรฐานสมจริง -->
                     <div class="app-grid">
-                        <div class="app-icon-wrapper" onclick="openApp('pojav')">
-                            <div class="app-icon pojav">⛏️</div>
-                            <span>PojavLauncher</span>
-                        </div>
-                        <div class="app-icon-wrapper" onclick="openApp('delta')">
-                            <div class="app-icon delta">Δ</div>
-                            <span>Roblox Delta</span>
-                        </div>
-                        <div class="app-icon-wrapper" onclick="openApp('installer')">
-                            <div class="app-icon apk">📦</div>
-                            <span>APK Installer</span>
-                        </div>
                         <div class="app-icon-wrapper" onclick="openApp('playstore')">
                             <div class="app-icon store">▶</div>
                             <span>Play Store</span>
@@ -133,6 +121,18 @@
                         <div class="app-icon-wrapper" onclick="openApp('chrome')">
                             <div class="app-icon chrome">🌐</div>
                             <span>Chrome</span>
+                        </div>
+                        <div class="app-icon-wrapper" onclick="openApp('files')">
+                            <div class="app-icon files">📁</div>
+                            <span>Files</span>
+                        </div>
+                        <div class="app-icon-wrapper" onclick="openApp('photos')">
+                            <div class="app-icon photos">🖼️</div>
+                            <span>Photos</span>
+                        </div>
+                        <div class="app-icon-wrapper" onclick="openApp('youtube')">
+                            <div class="app-icon youtube">▶</div>
+                            <span>YouTube</span>
                         </div>
                         <div class="app-icon-wrapper" onclick="openApp('settings')">
                             <div class="app-icon settings">⚙️</div>
@@ -142,48 +142,121 @@
 
                     <!-- Dock ด้านล่าง -->
                     <div class="android-dock">
-                        <div class="app-icon-wrapper" onclick="openApp('pojav')"><div class="app-icon pojav" style="width:38px;height:38px;font-size:16px;">⛏️</div></div>
-                        <div class="app-icon-wrapper" onclick="openApp('delta')"><div class="app-icon delta" style="width:38px;height:38px;font-size:16px;">Δ</div></div>
-                        <div class="app-icon-wrapper" onclick="openApp('installer')"><div class="app-icon apk" style="width:38px;height:38px;font-size:16px;">📦</div></div>
-                        <div class="app-icon-wrapper" onclick="openApp('settings')"><div class="app-icon settings" style="width:38px;height:38px;font-size:16px;">⚙️</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('chrome')"><div class="app-icon chrome" style="width:42px;height:42px;font-size:18px;">🌐</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('playstore')"><div class="app-icon store" style="width:42px;height:42px;font-size:18px;">▶</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('youtube')"><div class="app-icon youtube" style="width:42px;height:42px;font-size:18px;">▶</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('settings')"><div class="app-icon settings" style="width:42px;height:42px;font-size:18px;">⚙️</div></div>
                     </div>
                 </div>
 
                 <!-- ================= UI ภายในแอปพลิเคชัน ================= -->
 
-                <!-- 1. PojavLauncher -->
-                <div id="app-pojav" class="app-view" style="display: none;">
-                    <div class="app-header-bar" style="background:#5c4033;">
+                <!-- 1. Play Store -->
+                <div id="app-playstore" class="app-view" style="display: none;">
+                    <div class="app-header-bar">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>PojavLauncher</h3>
+                        <h3>Google Play Store</h3>
                     </div>
-                    <div class="app-content-scroll" style="background:#2b2b2b; text-align:center; padding-top:20px;">
-                        <div style="font-size:36px; margin-bottom:10px;">🟩🟫</div>
-                        <h3 style="color:#fff; margin-bottom:10px;">Minecraft Java 1.20.4</h3>
-                        <p style="color:#aaa; font-size:11px; margin-bottom:15px;">RAM Allocated: 8192 MB (24 GB Pool)</p>
-                        <div style="background:#3c3c3c; padding:10px; border-radius:8px; margin-bottom:15px; text-align:left; font-family:monospace; font-size:10px; color:#0f0;">
-                            [Info] Logged in as: Steve (Offline)<br>
-                            [Info] Renderer: OpenGL ES 3.2<br>
-                            [Ready] Click Play to Launch Game
+                    <div class="app-content-scroll">
+                        <div class="store-search">🔍 ค้นหาแอปและเกม</div>
+                        <div class="store-section-title">แนะนำสำหรับคุณ</div>
+                        <div class="store-app-row">
+                            <div class="store-app-icon" style="background:#01875f;">🎮</div>
+                            <div class="store-app-info">
+                                <h4>ROV: Mobile MOBA</h4>
+                                <p>Action • 150 MB</p>
+                            </div>
+                            <button class="install-btn" id="btn-rov" onclick="installApp('rov', 'ROV')">ติดตั้ง</button>
                         </div>
-                        <button class="confirm-btn" onclick="alert('🎮 กำลังรัน Minecraft Java บน PojavLauncher สำเร็จ!')" style="background:#388e3c;">LAUNCH GAME</button>
                     </div>
                 </div>
 
-                <!-- 2. Roblox Delta -->
-                <div id="app-delta" class="app-view" style="display: none;">
-                    <div class="app-header-bar" style="background:#111; border-bottom:1px solid #333;">
+                <!-- 2. Chrome -->
+                <div id="app-chrome" class="app-view" style="display: none;">
+                    <div class="app-header-bar chrome-bar">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3 style="color:#a855f7;">Delta Executor</h3>
+                        <input type="text" class="url-input" id="chrome-url" value="https://www.google.com">
                     </div>
-                    <div class="app-content-scroll" style="background:#09090b; display:flex; flex-direction:column; padding:12px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                            <span style="font-size:11px; color:#a855f7; font-weight:bold;">Script Hub</span>
-                            <span style="font-size:10px; background:#18181b; padding:2px 8px; border-radius:4px; color:#10b981;">● Connected</span>
+                    <div class="app-content-scroll chrome-body">
+                        <h2>Google</h2>
+                        <div class="google-search-box" onclick="alert('เชื่อมต่อเครือข่ายความเร็วสูงสำเร็จ')">พิมพ์คำค้นหาหรือ URL เว็บไซต์...</div>
+                        <div class="quick-links">
+                            <div class="q-link" onclick="window.open('https://www.youtube.com', '_blank')">▶ YouTube</div>
+                            <div class="q-link" onclick="window.open('https://github.com', '_blank')">🐙 GitHub</div>
                         </div>
-                        <textarea id="delta-script" style="flex:1; background:#18181b; color:#a78bfa; border:1px solid #27272a; border-radius:8px; padding:8px; font-family:monospace; font-size:11px; resize:none; outline:none; min-height:140px;">-- Delta Executor v2.5.4
-print("Delta Mobile Initialized!");
-loadstring(game:HttpGet("https://raw.githubusercontent.com/..."))()</textarea>
-                        <div style="display:flex; gap:8px; margin-top:8px;">
-                            <button class="confirm-btn" onclick="alert('⚡ Execute Script สำเร็จ!')" style="background:#7c3aed; flex:1; padding:8px;">Execute</button>
-                            <button class="confirm-btn" onclick="document
+                    </div>
+                </div>
+
+                <!-- 3. Files -->
+                <div id="app-files" class="app-view" style="display: none;">
+                    <div class="app-header-bar" style="background:#2563eb;">
+                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
+                        <h3>Files Manager</h3>
+                    </div>
+                    <div class="app-content-scroll" style="padding: 16px;">
+                        <div style="font-size:12px; color:#94a3b8; margin-bottom:12px;">พื้นที่จัดเก็บข้อมูลภายใน (512 GB)</div>
+                        <div class="setting-row"><span>📁 Download</span> <strong>12 Items</strong></div>
+                        <div class="setting-row"><span>📁 Pictures</span> <strong>45 Items</strong></div>
+                        <div class="setting-row"><span>📁 Documents</span> <strong>3 Items</strong></div>
+                    </div>
+                </div>
+
+                <!-- 4. Photos -->
+                <div id="app-photos" class="app-view" style="display: none;">
+                    <div class="app-header-bar" style="background:#db2777;">
+                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
+                        <h3>Google Photos</h3>
+                    </div>
+                    <div class="app-content-scroll" style="text-align:center; padding-top:40px;">
+                        <div style="font-size:48px; margin-bottom:10px;">🖼️</div>
+                        <h3 style="margin-bottom:6px;">คลังภาพคลาวด์</h3>
+                        <p style="color:#94a3b8; font-size:11px;">รูปภาพทั้งหมดซิงค์อัตโนมัติเรียบร้อย</p>
+                    </div>
+                </div>
+
+                <!-- 5. YouTube -->
+                <div id="app-youtube" class="app-view" style="display: none;">
+                    <div class="app-header-bar" style="background:#dc2626;">
+                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
+                        <h3>YouTube</h3>
+                    </div>
+                    <div class="app-content-scroll" style="text-align:center; padding-top:40px;">
+                        <div style="font-size:48px; margin-bottom:10px;">▶️</div>
+                        <h3 style="margin-bottom:6px;">YouTube Cloud Stream</h3>
+                        <p style="color:#94a3b8; font-size:11px; margin-bottom:20px;">สตรีมวิดีโอ 4K 60FPS ไร้ดีเลย์</p>
+                        <button class="confirm-btn" onclick="window.open('https://www.youtube.com', '_blank')" style="background:#dc2626; width:auto; padding:8px 20px;">เปิดใช้งานเว็บยูทูบ</button>
+                    </div>
+                </div>
+
+                <!-- 6. Settings -->
+                <div id="app-settings" class="app-view" style="display: none;">
+                    <div class="app-header-bar">
+                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
+                        <h3>Settings</h3>
+                    </div>
+                    <div class="app-content-scroll settings-body">
+                        <div class="settings-group">
+                            <h4>Device Information</h4>
+                            <div class="setting-row"><span>Model</span> <strong>VMOS Cloud Ultra-X</strong></div>
+                            <div class="setting-row"><span>Android Version</span> <strong>Android 14</strong></div>
+                            <div class="setting-row"><span>RAM Status</span> <strong style="color:#10b981;">24 GB LPDDR5X</strong></div>
+                            <div class="setting-row"><span>Account</span> <strong id="settings-user-email" style="color:#38bdf8;">--</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Android Navigation Bar -->
+            <div class="android-navbar">
+                <span onclick="triggerNav('recent')">⬛</span>
+                <span onclick="goHome()">⌂</span>
+                <span onclick="goHome()">‹</span>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
