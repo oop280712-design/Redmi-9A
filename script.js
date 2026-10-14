@@ -60,7 +60,6 @@ function proceedToPlanSelection(email) {
         priceDisplay.innerHTML = `฿1,200 <span>/เดือน</span>`;
     }
 
-    // ซิงค์ชื่อผู้ใช้ไปที่ PojavLauncher Display ด้วย
     document.getElementById('pojav-username-display').textContent = email;
     document.getElementById('settings-user-email').textContent = email;
 }
@@ -98,6 +97,9 @@ function hideAllApps() {
     document.querySelectorAll('.app-view').forEach(app => app.style.display = 'none');
     document.getElementById('ninja-executor').style.display = 'none';
     document.getElementById('runtime-modal').style.display = 'none';
+    
+    const mcScreen = document.getElementById('minecraft-running-screen');
+    if (mcScreen) mcScreen.remove();
 }
 
 function openApp(appId) {
@@ -127,6 +129,50 @@ function openRuntimeManager() {
 
 function goHome() {
     hideAllApps();
+}
+
+// จำลองการกด PLAY แยกตามเวอร์ชันที่เลือก (โหลดโปรไฟล์ -> หน้าจอดำรอนิดนึง -> เข้าเกม Java)
+function launchMinecraftJava() {
+    const selectedVersion = document.getElementById('profile-version-select').value;
+    hideAllApps();
+    const screen = document.getElementById('vmos-screen');
+
+    const mcContainer = document.createElement('div');
+    mcContainer.id = 'minecraft-running-screen';
+    mcContainer.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; background:#000; z-index:100; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; font-family:monospace;';
+    
+    mcContainer.innerHTML = `
+        <div id="mc-status-text" style="font-size:13px; color:#aaa; text-align:center; padding:0 20px;">
+            ▶ Loading Profile: ${selectedVersion}...
+        </div>
+    `;
+    screen.appendChild(mcContainer);
+
+    setTimeout(() => {
+        document.getElementById('mc-status-text').innerHTML = `
+            <div style="font-size: 24px; margin-bottom: 10px;">⏳</div>
+            Initializing Java Runtime & Libraries for ${selectedVersion}...
+        `;
+    }, 1500);
+
+    setTimeout(() => {
+        document.getElementById('mc-status-text').innerHTML = ``;
+        mcContainer.style.background = '#050505';
+    }, 3000);
+
+    setTimeout(() => {
+        mcContainer.style.background = '#2c1e14';
+        mcContainer.innerHTML = `
+            <div style="position:absolute; top:10px; left:10px; font-size:10px; color:#888;">Minecraft* Java Edition (${selectedVersion})</div>
+            <div style="font-size:26px; font-weight:bold; letter-spacing:3px; color:#fff; text-shadow: 2px 2px #000; margin-bottom:25px;">MINECRAFT JAVA</div>
+            <div style="display:flex; flex-direction:column; gap:8px; width:190px;">
+                <button style="background:#555; color:#fff; border:2px solid #000; padding:8px; font-weight:bold; cursor:pointer;" onclick="alert('เข้าสู่หน้า Singleplayer สำเร็จ')">Singleplayer</button>
+                <button style="background:#555; color:#fff; border:2px solid #000; padding:8px; font-weight:bold; cursor:pointer;" onclick="alert('เข้าสู่หน้า Multiplayer สำเร็จ')">Multiplayer</button>
+                <button style="background:#555; color:#fff; border:2px solid #000; padding:8px; font-weight:bold; cursor:pointer;" onclick="goHome()">Quit Game</button>
+            </div>
+            <div style="position:absolute; bottom:10px; font-size:9px; color:#aaa;">PojavLauncher Mobile Cloud</div>
+        `;
+    }, 5000);
 }
 
 function enterRobloxGame() {
