@@ -65,7 +65,7 @@
                     <ul class="plan-specs">
                         <li>⚡ 8 Cores Flagship vCPU</li>
                         <li>🧠 24 GB LPDDR5X RAM</li>
-                        <li>🛡️ Pojav & Roblox Pre-installed</li>
+                        <li>🛡️ PojavLauncher & Roblox Pre-installed</li>
                     </ul>
                 </div>
             </div>
@@ -81,7 +81,7 @@
         </div>
     </div>
 
-    <!-- 4. หน้าจอสมาร์ตโฟนเสมือนจริง (VMOS Cloud Phone UI ระดับพรีเมียม) -->
+    <!-- 4. หน้าจอสมาร์ตโฟนเสมือนจริง (VMOS Cloud Phone UI) -->
     <div class="phone-frame">
         <div class="vmos-container">
             
@@ -112,7 +112,7 @@
                         <p id="home-widget-date">วันจันทร์, 12 ตุลาคม</p>
                     </div>
 
-                    <!-- ตารางแอปพลิเคชัน (มี PojavLauncher, Roblox, Play Store, Chrome, YouTube, Settings) -->
+                    <!-- ตารางแอปพลิเคชัน -->
                     <div class="app-grid">
                         <div class="app-icon-wrapper" onclick="openApp('pojav')">
                             <div class="app-icon pojav">⛏️</div>
@@ -149,28 +149,156 @@
                     </div>
                 </div>
 
-                <!-- ================= UI ภายในแอปพลิเคชัน ================= -->
-
-                <!-- 1. PojavLauncher -->
-                <div id="app-pojav" class="app-view" style="display: none;">
-                    <div class="app-header-bar" style="background:#5c4033;">
-                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>PojavLauncher</h3>
-                    </div>
-                    <div class="app-content-scroll" style="background:#2b2b2b; text-align:center; padding-top:20px;">
-                        <div style="font-size:36px; margin-bottom:10px;">🟩🟫</div>
-                        <h3 style="color:#fff; margin-bottom:10px;">Minecraft Java 1.20.4</h3>
-                        <p style="color:#aaa; font-size:11px; margin-bottom:15px;">RAM Allocated: 8192 MB (24 GB Pool)</p>
-                        <div style="background:#3c3c3c; padding:10px; border-radius:8px; margin-bottom:15px; text-align:left; font-family:monospace; font-size:10px; color:#0f0;">
-                            [Info] Logged in as: Steve (Offline)<br>
-                            [Info] Renderer: OpenGL ES 3.2<br>
-                            [Ready] Click Play to Launch Game
+                <!-- ================= UI ภายในแอปพลิเคชัน (PojavLauncher จำลองเหมือนของจริงทุกหน้า) ================= -->
+                
+                <!-- 1. PojavLauncher หน้าหลัก (Main Menu) -->
+                <div id="app-pojav" class="app-view" style="display: none; background: #1a1a1a; color: #fff;">
+                    <div class="pojav-top-bar">
+                        <span id="pojav-username-display" style="font-weight: bold;">oop280712</span>
+                        <div style="display:flex; gap:12px;">
+                            <span onclick="openPojavSettings()" style="cursor:pointer; font-size:18px;">⚙️</span>
+                            <span onclick="goHome()" style="cursor:pointer; font-size:18px;">🏠</span>
                         </div>
-                        <button class="confirm-btn" onclick="alert('🎮 กำลังรัน Minecraft Java บน PojavLauncher สำเร็จ!')" style="background:#388e3c;">LAUNCH GAME</button>
+                    </div>
+                    
+                    <div class="pojav-content">
+                        <!-- เมนูด้านข้างจำลองจากภาพ -->
+                        <div class="pojav-menu-list" onclick="alert('เปิดหน้า About Launcher')">📄 ABOUT LAUNCHER</div>
+                        <div class="pojav-menu-list" onclick="alert('เปิดหน้า Custom Controls')">🎮 CUSTOM CONTROLS</div>
+                        <div class="pojav-menu-list" onclick="alert('เปิดหน้า Execute a .jar')">📦 EXECUTE A .JAR</div>
+                        <div class="pojav-menu-list" onclick="alert('เปิดหน้า Terminal')">⬛ TERMINAL</div>
+                        <div class="pojav-menu-list" onclick="alert('แชร์ไฟล์ Log สำเร็จ')">📤 SHARE LOG FILE</div>
+                    </div>
+
+                    <!-- ส่วนล่างโปรไฟล์และปุ่ม PLAY -->
+                    <div class="pojav-bottom-panel">
+                        <div style="background:#222; padding:8px 12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <span style="font-size:12px;">forge - 1.20.1-forge-47.4.5</span>
+                            <span onclick="openPojavSettings()" style="cursor:pointer;">✏️</span>
+                        </div>
+                        <button class="pojav-play-btn" onclick="alert('🎮 กำลังเริ่มรัน Minecraft Java (Forge 1.20.1)...')">PLAY</button>
                     </div>
                 </div>
 
-                <!-- 2. Roblox (กดเข้าแมพแล้วมีตัวรันนินจาเด้งขึ้นมา) -->
+                <!-- 2. PojavLauncher Settings (หน้าตั้งค่าหลัก) -->
+                <div id="app-pojav-settings" class="app-view" style="display: none; background: #1a1a1a; color: #fff;">
+                    <div class="pojav-top-bar">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span onclick="openApp('pojav')" style="cursor:pointer; font-size:20px;">&larr;</span>
+                            <span>Settings</span>
+                        </div>
+                        <span onclick="goHome()" style="cursor:pointer; font-size:18px;">🏠</span>
+                    </div>
+                    <div class="pojav-settings-scroll">
+                        <div class="p-setting-item" onclick="openSubSetting('video')">
+                            <h4>Video settings</h4>
+                            <p>Renderer, Resolution scaler, VSync, Notch</p>
+                        </div>
+                        <div class="p-setting-item" onclick="openSubSetting('java')">
+                            <h4>Java Tweaks</h4>
+                            <p>Memory allocation, Runtime manager, JVM arguments</p>
+                        </div>
+                        <div class="p-setting-item" onclick="openSubSetting('mouse')">
+                            <h4>Virtual mouse</h4>
+                            <p>Mouse scaling, Mouse speed, Pointer icon</p>
+                        </div>
+                        <div class="p-setting-item" onclick="openSubSetting('gestures')">
+                            <h4>Gestures & Controls</h4>
+                            <p>Disable gestures, Long press delay, Button scaling</p>
+                        </div>
+                        <div class="p-setting-item" onclick="openSubSetting('launcher')">
+                            <h4>Launcher settings</h4>
+                            <p>Language, Quit launcher, Auto updates</p>
+                        </div>
+                        <div class="p-setting-item" onclick="openSubSetting('misc')">
+                            <h4>Miscellaneous settings</h4>
+                            <p>Check libraries, Cosmetica capes, Game download source</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.1 Video Settings Subpage -->
+                <div id="sub-setting-video" class="app-view" style="display: none; background: #1a1a1a; color: #fff;">
+                    <div class="pojav-top-bar">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span onclick="openPojavSettings()" style="cursor:pointer; font-size:20px;">&larr;</span>
+                            <span>Video settings</span>
+                        </div>
+                        <span onclick="goHome()" style="cursor:pointer;">🏠</span>
+                    </div>
+                    <div class="pojav-settings-scroll">
+                        <div class="setting-row-real">
+                            <span>Renderer</span>
+                            <select id="renderer-select" class="real-select" onchange="changeRenderer()">
+                                <option value="MobileGlues">MobileGlues (OpenGL 4.0)</option>
+                                <option value="Zink">Zink (Vulkan)</option>
+                                <option value="Angle">ANGLE GLES</option>
+                                <option value="Default">Default</option>
+                            </select>
+                        </div>
+                        <div class="setting-row-real">
+                            <span>Ignore notch</span>
+                            <input type="checkbox" checked>
+                        </div>
+                        <div class="setting-row-real" style="flex-direction:column; align-items:flex-start; gap:6px;">
+                            <span>Resolution Scaler: <strong id="res-val">60%</strong></span>
+                            <input type="range" min="20" max="100" value="60" style="width:100%;" oninput="document.getElementById('res-val').textContent=this.value+'%'">
+                        </div>
+                        <div class="setting-row-real">
+                            <span>Force enable VSync</span>
+                            <input type="checkbox">
+                        </div>
+                        <div class="setting-row-real">
+                            <span>Use alternate surface rendering</span>
+                            <input type="checkbox" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.2 Java Tweaks Subpage -->
+                <div id="sub-setting-java" class="app-view" style="display: none; background: #1a1a1a; color: #fff;">
+                    <div class="pojav-top-bar">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span onclick="openPojavSettings()" style="cursor:pointer; font-size:20px;">&larr;</span>
+                            <span>Java Tweaks</span>
+                        </div>
+                        <span onclick="goHome()" style="cursor:pointer;">🏠</span>
+                    </div>
+                    <div class="pojav-settings-scroll">
+                        <div class="p-setting-item" onclick="openRuntimeManager()">
+                            <h4>Runtime Manager</h4>
+                            <p>Manage installed Java Runtimes (Internal 8, 17, 21)</p>
+                        </div>
+                        <div class="setting-row-real" style="flex-direction:column; align-items:flex-start; gap:6px;">
+                            <span>Memory allocation: <strong id="ram-val">1024 MB</strong> (จาก 24 GB Pool)</span>
+                            <input type="range" min="512" max="16384" step="512" value="1024" style="width:100%;" oninput="document.getElementById('ram-val').textContent=this.value+' MB'">
+                        </div>
+                        <div class="setting-row-real">
+                            <span>Sandbox .jar execution</span>
+                            <input type="checkbox" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Runtime Manager Modal/View -->
+                <div id="runtime-modal" class="modal-backdrop" style="display:none;">
+                    <div class="modal-card" style="text-align:left;">
+                        <h3>Java Runtimes</h3>
+                        <p class="modal-subtitle">จัดการเวอร์ชัน Java ภายในเครื่องจำลอง</p>
+                        <div style="background:#111; padding:10px; border-radius:6px; margin-bottom:10px; font-size:12px;">
+                            <strong>Internal 8</strong> (1.8.0_482) - <span style="color:#10b981;">SET DEFAULT</span>
+                        </div>
+                        <div style="background:#111; padding:10px; border-radius:6px; margin-bottom:10px; font-size:12px;">
+                            <strong>Internal 17</strong> (17.0.18) - <span style="color:#38bdf8;">DEFAULT</span>
+                        </div>
+                        <div style="background:#111; padding:10px; border-radius:6px; margin-bottom:16px; font-size:12px;">
+                            <strong>Internal 21</strong> (21.0.10) - <span style="color:#10b981;">SET DEFAULT</span>
+                        </div>
+                        <button class="confirm-btn" onclick="document.getElementById('runtime-modal').style.display='none'">ปิดหน้าต่าง</button>
+                    </div>
+                </div>
+
+                <!-- 3. Roblox (กดเข้าแมพแล้วมีตัวรันนินจาเด้งขึ้นมา) -->
                 <div id="app-roblox" class="app-view" style="display: none;">
                     <div class="app-header-bar" style="background:#222;">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
@@ -183,7 +311,7 @@
                             <p style="color:#94a3b8; font-size:10px;">🟢 กดเพื่อเข้าสู่แมพ (จำลองตัวรันสคริปต์นินจา)</p>
                         </div>
                     </div>
-                    <!-- ตัวรันสคริปต์ไอคอนนินจา (ซ่อนไว้จนกว่าจะเข้าแมพ) -->
+                    <!-- ตัวรันสคริปต์ไอคอนนินจา -->
                     <div id="ninja-executor" class="ninja-executor-box" style="display:none;">
                         <div class="ninja-header" onclick="toggleNinjaMenu()">
                             <span>🥷 Ninja Script Hub</span>
@@ -196,7 +324,7 @@
                     </div>
                 </div>
 
-                <!-- 3. Play Store -->
+                <!-- 4. Play Store -->
                 <div id="app-playstore" class="app-view" style="display: none;">
                     <div class="app-header-bar">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
@@ -216,7 +344,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Chrome -->
+                <!-- 5. Chrome -->
                 <div id="app-chrome" class="app-view" style="display: none;">
                     <div class="app-header-bar chrome-bar">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
@@ -232,7 +360,7 @@
                     </div>
                 </div>
 
-                <!-- 5. YouTube -->
+                <!-- 6. YouTube -->
                 <div id="app-youtube" class="app-view" style="display: none;">
                     <div class="app-header-bar" style="background:#dc2626;">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
@@ -247,7 +375,7 @@
                     </div>
                 </div>
 
-                <!-- 6. Settings -->
+                <!-- 7. Settings -->
                 <div id="app-settings" class="app-view" style="display: none;">
                     <div class="app-header-bar">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
