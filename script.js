@@ -60,6 +60,8 @@ function proceedToPlanSelection(email) {
         priceDisplay.innerHTML = `฿1,200 <span>/เดือน</span>`;
     }
 
+    // ซิงค์ชื่อผู้ใช้ไปที่ PojavLauncher Display ด้วย
+    document.getElementById('pojav-username-display').textContent = email;
     document.getElementById('settings-user-email').textContent = email;
 }
 
@@ -95,6 +97,7 @@ setInterval(updateClock, 1000);
 function hideAllApps() {
     document.querySelectorAll('.app-view').forEach(app => app.style.display = 'none');
     document.getElementById('ninja-executor').style.display = 'none';
+    document.getElementById('runtime-modal').style.display = 'none';
 }
 
 function openApp(appId) {
@@ -103,11 +106,29 @@ function openApp(appId) {
     if (target) target.style.display = 'flex';
 }
 
+function openPojavSettings() {
+    hideAllApps();
+    document.getElementById('app-pojav-settings').style.display = 'flex';
+}
+
+function openSubSetting(subId) {
+    hideAllApps();
+    const target = document.getElementById(`sub-setting-${subId}`);
+    if (target) {
+        target.style.display = 'flex';
+    } else {
+        alert(`เปิดหน้าตั้งค่า: ${subId}`);
+    }
+}
+
+function openRuntimeManager() {
+    document.getElementById('runtime-modal').style.display = 'flex';
+}
+
 function goHome() {
     hideAllApps();
 }
 
-// กดเข้าแมพ Roblox แล้วจะมีตัวรันนินจาเด้งขึ้นมา
 function enterRobloxGame() {
     alert("🎮 กำลังโหลดเข้าสู่แมพ Roblox...");
     document.getElementById('ninja-executor').style.display = 'block';
