@@ -149,7 +149,7 @@
                     </div>
                 </div>
 
-                <!-- ================= UI ภายในแอปพลิเคชัน (PojavLauncher จำลองเหมือนของจริงทุกหน้า) ================= -->
+                <!-- ================= UI ภายในแอปพลิเคชัน (PojavLauncher แยกตามเวอร์ชัน) ================= -->
                 
                 <!-- 1. PojavLauncher หน้าหลัก (Main Menu) -->
                 <div id="app-pojav" class="app-view" style="display: none; background: #1a1a1a; color: #fff;">
@@ -162,7 +162,6 @@
                     </div>
                     
                     <div class="pojav-content">
-                        <!-- เมนูด้านข้างจำลองจากภาพ -->
                         <div class="pojav-menu-list" onclick="alert('เปิดหน้า About Launcher')">📄 ABOUT LAUNCHER</div>
                         <div class="pojav-menu-list" onclick="alert('เปิดหน้า Custom Controls')">🎮 CUSTOM CONTROLS</div>
                         <div class="pojav-menu-list" onclick="alert('เปิดหน้า Execute a .jar')">📦 EXECUTE A .JAR</div>
@@ -170,13 +169,17 @@
                         <div class="pojav-menu-list" onclick="alert('แชร์ไฟล์ Log สำเร็จ')">📤 SHARE LOG FILE</div>
                     </div>
 
-                    <!-- ส่วนล่างโปรไฟล์และปุ่ม PLAY -->
+                    <!-- ส่วนเลือกเวอร์ชันโปรไฟล์ -->
                     <div class="pojav-bottom-panel">
                         <div style="background:#222; padding:8px 12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                            <span style="font-size:12px;">forge - 1.20.1-forge-47.4.5</span>
+                            <select id="profile-version-select" style="background:transparent; color:#fff; border:none; font-size:12px; outline:none; width:100%;">
+                                <option value="forge-1.20.1">forge - 1.20.1-forge-47.4.5 (Java 17)</option>
+                                <option value="optifine-1.16.5">optifine - 1.16.5 (Java 8)</option>
+                                <option value="fabric-1.21">fabric - 1.21.1 (Java 21)</option>
+                            </select>
                             <span onclick="openPojavSettings()" style="cursor:pointer;">✏️</span>
                         </div>
-                        <button class="pojav-play-btn" onclick="alert('🎮 กำลังเริ่มรัน Minecraft Java (Forge 1.20.1)...')">PLAY</button>
+                        <button class="pojav-play-btn" onclick="launchMinecraftJava()">PLAY</button>
                     </div>
                 </div>
 
@@ -229,7 +232,7 @@
                     <div class="pojav-settings-scroll">
                         <div class="setting-row-real">
                             <span>Renderer</span>
-                            <select id="renderer-select" class="real-select" onchange="changeRenderer()">
+                            <select id="renderer-select" class="real-select">
                                 <option value="MobileGlues">MobileGlues (OpenGL 4.0)</option>
                                 <option value="Zink">Zink (Vulkan)</option>
                                 <option value="Angle">ANGLE GLES</option>
@@ -280,25 +283,25 @@
                     </div>
                 </div>
 
-                <!-- Runtime Manager Modal/View -->
+                <!-- Runtime Manager Modal -->
                 <div id="runtime-modal" class="modal-backdrop" style="display:none;">
                     <div class="modal-card" style="text-align:left;">
                         <h3>Java Runtimes</h3>
-                        <p class="modal-subtitle">จัดการเวอร์ชัน Java ภายในเครื่องจำลอง</p>
+                        <p class="modal-subtitle">จัดการเวอร์ชัน Java แยกตามโปรไฟล์เกม</p>
                         <div style="background:#111; padding:10px; border-radius:6px; margin-bottom:10px; font-size:12px;">
-                            <strong>Internal 8</strong> (1.8.0_482) - <span style="color:#10b981;">SET DEFAULT</span>
+                            <strong>Internal 8</strong> (1.8.0_482) - สำหรับเวอร์ชันเก่า 1.16.5 ลงไป
                         </div>
                         <div style="background:#111; padding:10px; border-radius:6px; margin-bottom:10px; font-size:12px;">
-                            <strong>Internal 17</strong> (17.0.18) - <span style="color:#38bdf8;">DEFAULT</span>
+                            <strong>Internal 17</strong> (17.0.18) - สำหรับเวอร์ชัน 1.17 - 1.20.4
                         </div>
                         <div style="background:#111; padding:10px; border-radius:6px; margin-bottom:16px; font-size:12px;">
-                            <strong>Internal 21</strong> (21.0.10) - <span style="color:#10b981;">SET DEFAULT</span>
+                            <strong>Internal 21</strong> (21.0.10) - สำหรับเวอร์ชัน 1.20.5 ขึ้นไป
                         </div>
                         <button class="confirm-btn" onclick="document.getElementById('runtime-modal').style.display='none'">ปิดหน้าต่าง</button>
                     </div>
                 </div>
 
-                <!-- 3. Roblox (กดเข้าแมพแล้วมีตัวรันนินจาเด้งขึ้นมา) -->
+                <!-- 3. Roblox -->
                 <div id="app-roblox" class="app-view" style="display: none;">
                     <div class="app-header-bar" style="background:#222;">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
@@ -311,7 +314,6 @@
                             <p style="color:#94a3b8; font-size:10px;">🟢 กดเพื่อเข้าสู่แมพ (จำลองตัวรันสคริปต์นินจา)</p>
                         </div>
                     </div>
-                    <!-- ตัวรันสคริปต์ไอคอนนินจา -->
                     <div id="ninja-executor" class="ninja-executor-box" style="display:none;">
                         <div class="ninja-header" onclick="toggleNinjaMenu()">
                             <span>🥷 Ninja Script Hub</span>
