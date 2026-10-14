@@ -111,15 +111,21 @@ body {
 
 .android-navbar { height: 36px; background: #020408; display: flex; justify-content: space-around; align-items: center; color: #94a3b8; font-size: 18px; z-index: 50; }
 
-.app-view {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 30; display: flex; flex-direction: column;
+/* Pojav UI Styles */
+.pojav-top-bar {
+    height: 48px; background: #1a1a1a; border-bottom: 2px solid #2e7d32; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; font-size: 14px;
 }
-.app-header-bar { height: 48px; background: #1e293b; display: flex; align-items: center; padding: 0 16px; gap: 14px; border-bottom: 1px solid #334155; }
-.app-header-bar.chrome-bar { background: #334155; }
-.app-back-btn { font-size: 22px; cursor: pointer; color: #fff; font-weight: bold; }
-.app-header-bar h3 { font-size: 15px; color: #fff; }
-.url-input { flex: 1; background: #1e293b; border: none; border-radius: 18px; padding: 6px 12px; color: #fff; font-size: 12px; outline: none; }
-.app-content-scroll { flex: 1; overflow-y: auto; padding: 16px; color: #fff; }
+.pojav-content { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.pojav-menu-list { background: #222; padding: 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; border-left: 3px solid #2e7d32; }
+.pojav-menu-list:hover { background: #2a2a2a; }
+.pojav-bottom-panel { padding: 12px; background: #1a1a1a; border-top: 1px solid #333; }
+.pojav-play-btn { background: #2e7d32; color: #fff; border: none; width: 100%; padding: 12px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+.pojav-settings-scroll { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.p-setting-item { background: #222; padding: 12px; border-radius: 6px; cursor: pointer; }
+.p-setting-item h4 { font-size: 13px; color: #fff; margin-bottom: 2px; }
+.p-setting-item p { font-size: 10px; color: #888; }
+.setting-row-real { background: #222; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+.real-select { background: #333; color: #fff; border: 1px solid #444; padding: 4px 8px; border-radius: 4px; font-size: 11px; }
 
 /* Ninja Executor Floating Box */
 .ninja-executor-box {
@@ -129,6 +135,16 @@ body {
     background: #7c3aed; color: #fff; font-size: 10px; font-weight: bold; padding: 4px 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
 }
 .ninja-body { padding: 6px; }
+
+.app-view {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 30; display: flex; flex-direction: column;
+}
+.app-header-bar { height: 48px; background: #1e293b; display: flex; align-items: center; padding: 0 16px; gap: 14px; border-bottom: 1px solid #334155; }
+.app-header-bar.chrome-bar { background: #334155; }
+.app-back-btn { font-size: 22px; cursor: pointer; color: #fff; font-weight: bold; }
+.app-header-bar h3 { font-size: 15px; color: #fff; }
+.url-input { flex: 1; background: #1e293b; border: none; border-radius: 18px; padding: 6px 12px; color: #fff; font-size: 12px; outline: none; }
+.app-content-scroll { flex: 1; overflow-y: auto; padding: 16px; color: #fff; }
 
 .store-search { background: #1e293b; padding: 10px 14px; border-radius: 10px; color: #94a3b8; font-size: 12px; margin-bottom: 16px; }
 .store-section-title { font-size: 14px; font-weight: bold; margin-bottom: 12px; color: #38bdf8; }
