@@ -3,85 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VMOS Cloud Pro - Flagship Virtual System</title>
+    <title>VMOS Cloud Pro - Native APK Streamer</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 1. หน้าจอสมัครสมาชิก (Register) -->
-    <div id="auth-register-modal" class="modal-backdrop">
-        <div class="modal-card">
-            <h2>☁️ สมัครสมาชิก VMOS Cloud</h2>
-            <p class="modal-subtitle">สร้างบัญชีผู้ใช้ใหม่เพื่อเริ่มต้นใช้งาน Cloud Phone</p>
-            <div class="auth-form">
-                <div class="vip-input-group">
-                    <label>อีเมล:</label>
-                    <input type="email" id="reg-email" placeholder="ระบุอีเมลของคุณ">
-                </div>
-                <div class="vip-input-group">
-                    <label>รหัสผ่าน:</label>
-                    <input type="password" id="reg-pass" placeholder="••••••••">
-                </div>
-                <button class="confirm-btn" onclick="handleRegister()">📝 ลงทะเบียนบัญชี</button>
-                <p class="auth-switch-text" onclick="switchAuthTo('login')">มีบัญชีอยู่แล้ว? <a>เข้าสู่ระบบ</a></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. หน้าจอเข้าสู่ระบบ + Google Login -->
-    <div id="auth-login-modal" class="modal-backdrop" style="display: none;">
-        <div class="modal-card">
-            <h2>☁️ เข้าสู่ระบบ VMOS Cloud</h2>
-            <p class="modal-subtitle">เข้าสู่ระบบเพื่อจัดการเครื่องจำลองคลาวด์ของคุณ</p>
-            <div class="auth-form">
-                <div class="vip-input-group">
-                    <label>อีเมล:</label>
-                    <input type="email" id="login-email" placeholder="เช่น oop280712@gmail.com">
-                </div>
-                <div class="vip-input-group">
-                    <label>รหัสผ่าน:</label>
-                    <input type="password" id="login-pass" placeholder="••••••••">
-                </div>
-                <button class="confirm-btn" onclick="handleLogin()">🔐 เข้าสู่ระบบ</button>
-                <div class="divider-text">หรือเชื่อมต่อด่วน</div>
-                <button class="google-login-btn" onclick="handleGoogleLogin()">
-                    <span class="g-icon">G</span> เข้าสู่ระบบด้วย Google Account
-                </button>
-                <p class="auth-switch-text" onclick="switchAuthTo('register')">ยังไม่มีบัญชี? <a>สมัครสมาชิก</a></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. หน้าจอเลือกแพ็กเกจและระยะเวลาเช่า -->
-    <div id="plan-modal" class="modal-backdrop" style="display: none;">
-        <div class="modal-card">
-            <h2>☁️ เลือกแพ็กเกจและระยะเวลาเช่า Cloud Phone</h2>
-            <p class="modal-subtitle" id="user-welcome-sub">กำลังตรวจสอบสิทธิ์บัญชีผู้ใช้...</p>
-            <div class="plans-grid">
-                <div class="plan-card active">
-                    <div class="plan-badge" id="plan-badge-text">VIP / ฟรี</div>
-                    <h3 id="plan-title-text">Ultra Extreme</h3>
-                    <div class="plan-price" id="price-display"><span style="color:#10b981;">FREE (VIP)</span></div>
-                    <ul class="plan-specs">
-                        <li>⚡ 8 Cores Flagship vCPU</li>
-                        <li>🧠 24 GB LPDDR5X RAM</li>
-                        <li>📦 Real APK UI Extraction Core Engine</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="vip-input-group" style="text-align: left; margin-bottom: 16px;">
-                <label>เลือกระยะเวลาการเช่าเครื่อง:</label>
-                <select id="rental-duration" class="rental-select">
-                    <option value="1">1 เดือน (Standard)</option>
-                    <option value="3">3 เดือน (ประหยัด 10%)</option>
-                    <option value="12" selected>1 ปี (VIP Unlimited / คุ้มที่สุด)</option>
-                </select>
-            </div>
-            <button class="confirm-btn" onclick="confirmSubscription()">💳 ยืนยันการสั่งซื้อและเริ่มใช้งานทันที</button>
-        </div>
-    </div>
-
-    <!-- 4. หน้าจอสมาร์ตโฟนเสมือนจริง (VMOS Cloud Phone UI) -->
+    <!-- หน้าจอสมาร์ตโฟนเสมือนจริง (VMOS Cloud Phone) -->
     <div class="phone-frame">
         <div class="vmos-container">
             
@@ -98,13 +25,6 @@
             <!-- หน้าจอแสดงผลหลัก -->
             <div class="vmos-screen" id="vmos-screen">
                 
-                <!-- หน้าจอบูตเครื่อง -->
-                <div id="boot-screen" class="boot-screen" style="display: none;">
-                    <div class="android-logo">android</div>
-                    <div class="spinner"></div>
-                    <p class="boot-text" id="boot-status">Loading Cloud Kernel...</p>
-                </div>
-
                 <!-- หน้าจอหลัก Android Home -->
                 <div id="android-home" class="android-home">
                     <div class="widget-container">
@@ -112,23 +32,11 @@
                         <p id="home-widget-date">วันจันทร์, 12 ตุลาคม</p>
                     </div>
 
-                    <!-- ตารางแอปพลิเคชัน (มีเฉพาะตัวติดตั้ง APK และแอปพื้นฐาน) -->
-                    <div class="app-grid" id="home-app-grid">
-                        <div class="app-icon-wrapper" onclick="openApp('apkinstaller')">
-                            <div class="app-icon apkinstaller">📥</div>
-                            <span>APK Installer</span>
-                        </div>
-                        <div class="app-icon-wrapper" onclick="openApp('playstore')">
-                            <div class="app-icon store">▶</div>
-                            <span>Play Store</span>
-                        </div>
-                        <div class="app-icon-wrapper" onclick="openApp('chrome')">
-                            <div class="app-icon chrome">🌐</div>
-                            <span>Chrome</span>
-                        </div>
-                        <div class="app-icon-wrapper" onclick="openApp('youtube')">
-                            <div class="app-icon youtube">▶</div>
-                            <span>YouTube</span>
+                    <!-- แอปสำหรับอัปโหลดและดึงหน้า APK -->
+                    <div class="app-grid">
+                        <div class="app-icon-wrapper" onclick="openApp('apkextractor')">
+                            <div class="app-icon apk">📦</div>
+                            <span>APK Extractor</span>
                         </div>
                         <div class="app-icon-wrapper" onclick="openApp('settings')">
                             <div class="app-icon settings">⚙️</div>
@@ -138,104 +46,47 @@
 
                     <!-- Dock ด้านล่าง -->
                     <div class="android-dock">
-                        <div class="app-icon-wrapper" onclick="openApp('apkinstaller')"><div class="app-icon apkinstaller" style="width:42px;height:42px;font-size:18px;">📥</div></div>
-                        <div class="app-icon-wrapper" onclick="openApp('chrome')"><div class="app-icon chrome" style="width:42px;height:42px;font-size:18px;">🌐</div></div>
-                        <div class="app-icon-wrapper" onclick="openApp('settings')"><div class="app-icon settings" style="width:42px;height:42px;font-size:18px;">⚙️</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('apkextractor')"><div class="app-icon apk" style="width:40px;height:40px;font-size:18px;">📦</div></div>
+                        <div class="app-icon-wrapper" onclick="openApp('settings')"><div class="app-icon settings" style="width:40px;height:40px;font-size:18px;">⚙️</div></div>
                     </div>
                 </div>
 
-                <!-- ================= UI ภายในแอปพลิเคชัน ================= -->
-
-                <!-- 1. APK Installer / UI Extractor Engine -->
-                <div id="app-apkinstaller" class="app-view" style="display: none; background: #0f172a; color: #fff;">
-                    <div class="app-header-bar" style="background:#1e293b;">
-                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>APK Installer & UI Extractor</h3>
-                    </div>
-                    <div class="app-content-scroll" style="padding:16px;">
-                        <div style="background:#1e293b; border:1px dashed #38bdf8; border-radius:12px; padding:20px; text-align:center; margin-bottom:16px;">
-                            <div style="font-size:32px; margin-bottom:8px;">📁</div>
-                            <h4 style="font-size:13px; color:#fff; margin-bottom:6px;">เลือกไฟล์ APK ของคุณ</h4>
-                            <p style="font-size:10px; color:#94a3b8; margin-bottom:12px;">ดึงหน้าตา UI และ Manifest จากไฟล์ APK เพื่อรันตรงบน Cloud Phone</p>
-                            <input type="file" id="apk-file-input" accept=".apk" style="display:none;" onchange="handleApkUpload(event)">
-                            <button class="confirm-btn" style="width:auto; padding:8px 16px; font-size:12px;" onclick="document.getElementById('apk-file-input').click()">เลือกไฟล์ .APK</button>
-                        </div>
-
-                        <div id="apk-parsing-status" style="display:none; background:#1e293b; border-radius:10px; padding:12px; margin-bottom:16px; font-size:11px;">
-                            <div style="color:#38bdf8; font-weight:bold; margin-bottom:4px;">⏳ กำลังถอดรหัสไฟล์ APK และดึง Layout UI...</div>
-                            <div id="apk-parse-log" style="color:#94a3b8; font-family:monospace; font-size:10px;">Reading APK Resources & XML Manifest...</div>
-                        </div>
-
-                        <div style="font-size:12px; font-weight:bold; color:#38bdf8; margin-bottom:10px;">รายการแอป APK ที่ติดตั้งในเครื่อง</div>
-                        <div id="installed-apk-list">
-                            <!-- แสดงรายการ APK ที่ติดตั้งแล้ว -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Container สำหรับแสดงผล UI แอป APK ที่ดึงข้อมูลมาได้ 100% -->
-                <div id="extracted-apk-ui-view" class="app-view" style="display: none; background: #000; color: #fff;">
-                    <div class="app-header-bar" style="background:#111; border-bottom:1px solid #222;">
-                        <span class="app-back-btn" onclick="closeExtractedApk()">&larr;</span>
-                        <h3 id="extracted-apk-title">APK Native App</h3>
-                    </div>
-                    <div id="extracted-apk-render-area" style="flex:1; width:100%; height:100%; overflow:auto;">
-                        <!-- หน้าตา UI จริงที่ดึงมาจาก APK จะแสดงผลตรงนี้ -->
-                    </div>
-                </div>
-
-                <!-- 2. Play Store -->
-                <div id="app-playstore" class="app-view" style="display: none;">
+                <!-- ================= ระบบดึงไฟล์ APK ของจริง ================= -->
+                <div id="app-apkextractor" class="app-view" style="display: none;">
                     <div class="app-header-bar">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>Google Play Store</h3>
+                        <h3>APK Native Layout Extractor</h3>
                     </div>
-                    <div class="app-content-scroll">
-                        <div class="store-search">🔍 ค้นหาแอป APK หรือเกม</div>
-                        <div class="store-section-title">แนะนำสำหรับคุณ</div>
-                        <div class="store-app-row">
-                            <div class="store-app-icon" style="background:#01875f;">🎮</div>
-                            <div class="store-app-info">
-                                <h4>ROV: Mobile MOBA</h4>
-                                <p>Action • 150 MB</p>
-                            </div>
-                            <button class="install-btn" id="btn-rov" onclick="installApp('rov', 'ROV')">ติดตั้ง</button>
+                    <div class="app-content-scroll" style="padding:16px;">
+                        <div style="border: 2px dashed #38bdf8; border-radius: 12px; padding: 20px; text-align: center; background: #1e293b; margin-bottom: 16px;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">📂</div>
+                            <h4 style="color: #fff; font-size: 13px; margin-bottom: 4px;">อัปโหลดไฟล์ .APK ของคุณ</h4>
+                            <p style="color: #94a3b8; font-size: 10px; margin-bottom: 12px;">ระบบจะดึง Layout XML และ Assets มาแสดงผลทั้งหมด 100%</p>
+                            <input type="file" id="apk-file-input" accept=".apk" style="display:none;" onchange="processRealApkFile(event)">
+                            <button class="confirm-btn" style="width:auto; padding:8px 16px; font-size:12px;" onclick="document.getElementById('apk-file-input').click()">เลือกไฟล์ APK</button>
                         </div>
+
+                        <div id="extraction-status" style="display:none; background:#0f172a; border-radius:8px; padding:12px; font-family:monospace; font-size:10px; color:#38bdf8; margin-bottom:12px;">
+                            กำลังอ่านโครงสร้างไบนารี APK และถอดรหัส Layout XML...
+                        </div>
+
+                        <div style="font-size:12px; font-weight:bold; color:#38bdf8; margin-bottom:8px;">แอปที่ดึงโครงสร้างสำเร็จ:</div>
+                        <div id="extracted-apps-container"></div>
                     </div>
                 </div>
 
-                <!-- 3. Chrome -->
-                <div id="app-chrome" class="app-view" style="display: none;">
-                    <div class="app-header-bar chrome-bar">
-                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <input type="text" class="url-input" id="chrome-url" value="https://www.google.com">
+                <!-- พื้นที่แสดงผลหน้าตา UI ที่ดึงมาจาก APK โดยตรง -->
+                <div id="apk-native-view" class="app-view" style="display: none; background: #000;">
+                    <div class="app-header-bar" style="background:#111;">
+                        <span class="app-back-btn" onclick="openApp('apkextractor')">&larr;</span>
+                        <h3 id="active-apk-title">Native APK View</h3>
                     </div>
-                    <div class="app-content-scroll chrome-body">
-                        <h2>Google</h2>
-                        <div class="google-search-box" onclick="alert('เชื่อมต่อเครือข่ายความเร็วสูงสำเร็จ')">พิมพ์คำค้นหาหรือ URL เว็บไซต์...</div>
-                        <div class="quick-links">
-                            <div class="q-link" onclick="window.open('https://www.youtube.com', '_blank')">▶ YouTube</div>
-                            <div class="q-link" onclick="window.open('https://github.com', '_blank')">🐙 GitHub</div>
-                        </div>
+                    <div id="apk-dom-container" style="flex:1; width:100%; height:100%; overflow:auto; background:#fff; color:#000;">
+                        <!-- หน้าตา UI ทั้งหมดจะถูกเรนเดอร์ตรงนี้จากไฟล์ APK โดยไม่มีการเขียนโค้ดเพิ่มเอง -->
                     </div>
                 </div>
 
-                <!-- 4. YouTube -->
-                <div id="app-youtube" class="app-view" style="display: none;">
-                    <div class="app-header-bar" style="background:#dc2626;">
-                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>YouTube Cloud Stream</h3>
-                    </div>
-                    <div class="app-content-scroll" style="background:#0f172a; padding:12px;">
-                        <div style="background:#1e293b; border-radius:12px; padding:12px; margin-bottom:12px;">
-                            <div style="background:#dc2626; height:120px; border-radius:8px; display:flex; justify-content:center; align-items:center; font-size:36px; margin-bottom:8px;">▶️</div>
-                            <h4 style="font-size:12px; color:#fff; margin-bottom:4px;">VMOS Cloud 4K Gaming Stream</h4>
-                            <p style="font-size:10px; color:#94a3b8;">สตรีมความคมชัดสูง 60FPS โดยไม่มีอาการหน่วง</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. Settings -->
+                <!-- Settings -->
                 <div id="app-settings" class="app-view" style="display: none;">
                     <div class="app-header-bar">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
@@ -243,11 +94,9 @@
                     </div>
                     <div class="app-content-scroll settings-body">
                         <div class="settings-group">
-                            <h4>Device Information</h4>
-                            <div class="setting-row"><span>Model</span> <strong>VMOS Cloud Ultra-X</strong></div>
-                            <div class="setting-row"><span>Android Version</span> <strong>Android 14</strong></div>
-                            <div class="setting-row"><span>RAM Status</span> <strong style="color:#10b981;">24 GB LPDDR5X</strong></div>
-                            <div class="setting-row"><span>Account</span> <strong id="settings-user-email" style="color:#38bdf8;">--</strong></div>
+                            <h4>System Info</h4>
+                            <div class="setting-row"><span>Cloud Engine</span> <strong>Direct APK Streamer</strong></div>
+                            <div class="setting-row"><span>RAM</span> <strong>24 GB LPDDR5X</strong></div>
                         </div>
                     </div>
                 </div>
@@ -256,7 +105,7 @@
 
             <!-- Android Navigation Bar -->
             <div class="android-navbar">
-                <span onclick="triggerNav('recent')">⬛</span>
+                <span>⬛</span>
                 <span onclick="goHome()">⌂</span>
                 <span onclick="goHome()">‹</span>
             </div>
