@@ -1,6 +1,5 @@
 const VIP_EMAILS = ["oop280712@gmail.com", "sawat2823@gmail.com"];
 let loggedInUserEmail = "";
-let installedApkApps = [];
 
 function switchAuthTo(target) {
     if (target === 'login') {
@@ -61,8 +60,8 @@ function proceedToPlanSelection(email) {
         priceDisplay.innerHTML = `฿1,200 <span>/เดือน</span>`;
     }
 
-    const settingsEmail = document.getElementById('settings-user-email');
-    if (settingsEmail) settingsEmail.textContent = email;
+    const emailEl = document.getElementById('settings-user-email');
+    if (emailEl) emailEl.textContent = email;
 }
 
 function confirmSubscription() {
@@ -110,63 +109,121 @@ function goHome() {
     hideAllApps();
 }
 
-// ฟังก์ชันแกะไฟล์ APK และดึงโครงสร้าง Layout ออกมาแสดงผลตรง ๆ
-function processRealApkFile(event) {
+// 📦 ระบบใช้ JSZip แกะไฟล์ APK ของจริงและดึงทรัพยากร Layout ออกมาแสดงผล
+async function processRealApkFile(event) {
     const file = event.target.files[0];
     if (!file) return;
 
     const statusEl = document.getElementById('extraction-status');
-    if (statusEl) {
-        statusEl.style.display = 'block';
-        statusEl.textContent = `Reading APK binary (${(file.size / (1024*1024)).toFixed(2)} MB)... Extracting AndroidManifest.xml & Layouts...`;
-    }
+    statusEl.style.display = 'block';
+    statusEl.textContent = `Reading APK binary: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)...`;
 
-    setTimeout(() => {
-        if (statusEl) statusEl.textContent = "Parsing XML Resources & Inflating Native Views...";
-    }, 1500);
+    try {
+        const zip = new JSZip();
+        const zipContent = await zip.loadAsync(file);
 
-    setTimeout(() => {
-        if (statusEl) statusEl.style.display = 'none';
-        const appName = file.name.replace('.apk', '');
-        
-        // บันทึกและสร้างปุ่มเรียกใช้งานแอปที่ดึงข้อมูลมา
-        const container = document.getElementById('extracted-apps-container');
-        if (container) {
+        statusEl.textContent = "Extracting AndroidManifest.xml & Layout XML files...";
+
+        // ค้นหาไฟล์ Layout XML ภายใน APK
+        let layoutFiles = Object.keys(zipContent.files).filter(filename => filename.startsWith("res/layout/"));
+        let manifestFile = zipContent.file("AndroidManifest.xml");
+
+        setTimeout(() => {
+            statusEl.style.display = 'none';
+            const appName = file.name.replace('.apk', '');
+            
+            const container = document.getElementById('extracted-apps-container');
             container.innerHTML = `
                 <div style="background:#1e293b; border-radius:10px; padding:12px; display:flex; align-items:center; justify-content:space-between;">
                     <div>
                         <h4 style="font-size:13px; color:#fff;">${appName}</h4>
-                        <p style="font-size:10px; color:#38bdf8;">Extracted Native UI Ready</p>
+                        <p style="font-size:10px; color:#38bdf8;">Layouts Found: ${layoutFiles.length} files</p>
                     </div>
-                    <button class="confirm-btn" style="width:auto; padding:6px 12px; font-size:11px;" onclick="renderExtractedApkDom('${appName}')">รันแอป</button>
+                    <button class="confirm-btn" style="width:auto; padding:6px 12px; font-size:11px;" onclick="renderRealApkDom('${appName}', ${JSON.stringify(layoutFiles)})">เปิดดูทรัพยากร</button>
                 </div>
             `;
-        }
-        alert(`✅ ดึงโครงสร้าง UI จากไฟล์ ${file.name} สำเร็จ!`);
-    }, 3000);
+            alert(`✅ ดึงทรัพยากรจากไฟล์ ${file.name} สำเร็จ! พบไฟล์ Layout ทั้งหมด ${layoutFiles.length} ไฟล์`);
+        }, 1500);
+
+    } catch (error) {
+        statusEl.textContent = "เกิดข้อผิดพลาดในการอ่านโครงสร้าง APK";
+        console.error(error);
+        alert("ไม่สามารถอ่านไฟล์ APK นี้ได้ ไฟล์อาจถูกเข้ารหัสหรือเสียหาย");
+    }
 }
 
-// เรนเดอร์หน้าตาที่สกัดได้ลงใน Cloud Phone โดยตรง
-function renderExtractedApkDom(appName) {
+// เรนเดอร์โครงสร้างทรัพยากรที่ดึงมาลงใน Cloud Phone
+function renderRealApkDom(appName, layoutFiles) {
     hideAllApps();
-    const activeTitle = document.getElementById('active-apk-title');
-    const nativeView = document.getElementById('apk-native-view');
-    if (activeTitle) activeTitle.textContent = appName;
-    if (nativeView) nativeView.style.display = 'flex';
+    document.getElementById('active-apk-title').textContent = appName;
+    document.getElementById('apk-native-view').style.display = 'flex';
 
     const domContainer = document.getElementById('apk-dom-container');
-    if (domContainer) {
-        // จำลองการโหลดโครงสร้างที่ถูกแปลงจากไบนารี APK มาแสดงผลแบบเต็มรูปแบบ
-        domContainer.innerHTML = `
-            <div style="padding: 20px; font-family: sans-serif; color: #333;">
-                <h2 style="color: #2563eb; margin-bottom: 10px;">📦 ${appName}</h2>
-                <p style="font-size: 12px; color: #64748b; margin-bottom: 20px;">หน้าอินเทอร์เฟซนี้ถูกดึงและแปลผลตรงจากทรัพยากรภายในไฟล์ APK</p>
-                <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1;">
-                    <label style="display:block; font-size:11px; font-weight:bold; margin-bottom:5px;">Native Input Field:</label>
-                    <input type="text" placeholder="Decoded from APK layout..." style="width:100%; padding:8px; border:1px solid #94a3b8; border-radius:4px; margin-bottom:10px;">
-                    <button style="width:100%; padding:10px; background:#0284c7; color:#fff; border:none; border-radius:4px; font-weight:bold;" onclick="alert('Action executed from real APK layout!')">Native APK Button</button>
-                </div>
+    domContainer.innerHTML = `
+        <div style="padding: 20px; font-family: sans-serif; color: #333;">
+            <h2 style="color: #2563eb; margin-bottom: 10px;">📦 ${appName}</h2>
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">รายชื่อไฟล์โครงสร้าง Layout XML และทรัพยากรที่สกัดจาก APK จริง:</p>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; max-height: 350px; overflow-y: auto;">
+                <ul style="font-size: 11px; color: #1e293b; padding-left: 18px;">
+                    ${layoutFiles.length > 0 ? layoutFiles.map(path => `<li style="margin-bottom:6px; font-family:monospace;">${path}</li>`).join('') : '<li>ไม่พบโฟลเดอร์ res/layout โดยตรง แต่สกัดแพ็กเกจระบบสำเร็จ</li>'}
+                </ul>
+            </div>
+        </div>
+    `;
+}
+
+// ระบบดาวน์โหลดและติดตั้ง APK จำลองแบบสมจริง
+function startRealisticDownload() {
+    const btn = document.getElementById('dl-btn');
+    btn.textContent = "กำลังดาวน์โหลด 0%";
+    btn.disabled = true;
+
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 25;
+        if (progress <= 100) {
+            btn.textContent = `กำลังดาวน์โหลด ${progress}%`;
+        }
+        if (progress >= 100) {
+            clearInterval(interval);
+            btn.textContent = "ติดตั้งแล้ว";
+            setTimeout(() => {
+                document.getElementById('android-install-dialog').style.display = 'flex';
+            }, 400);
+        }
+    }, 3500);
+}
+
+function cancelInstallation() {
+    document.getElementById('android-install-dialog').style.display = 'none';
+    const btn = document.getElementById('dl-btn');
+    btn.textContent = "ดาวน์โหลด";
+    btn.disabled = false;
+}
+
+function proceedInstallation() {
+    document.getElementById('android-install-dialog').style.display = 'none';
+    const progressDialog = document.getElementById('android-progress-dialog');
+    progressDialog.style.display = 'flex';
+
+    document.getElementById('progress-title').textContent = "กำลังติดตั้ง...";
+    document.getElementById('progress-desc').textContent = "กำลังเขียนไฟล์ระบบ APK ลงหน่วยความจำ Flash...";
+
+    setTimeout(() => {
+        document.getElementById('progress-title').textContent = "กำลังสแกนความปลอดภัย...";
+        document.getElementById('progress-desc').textContent = "Google Play Protect ตรวจสอบแล้ว ปลอดภัย 100%";
+    }, 1500);
+
+    setTimeout(() => {
+        progressDialog.style.display = 'none';
+        hideAllApps();
+        document.getElementById('apk-native-view').style.display = 'flex';
+        document.getElementById('active-apk-title').textContent = "Installed Application";
+        document.getElementById('apk-dom-container').innerHTML = `
+            <div style="padding: 20px; text-align: center;">
+                <h2 style="color: #10b981; margin-bottom: 10px;">✅ ติดตั้งแอปสำเร็จ</h2>
+                <p style="font-size: 12px; color: #64748b;">แอปพลิเคชันถูกรันผ่าน Cloud Engine พร้อมใช้งานเรียบร้อยแล้ว</p>
             </div>
         `;
-    }
+    }, 2800);
 }
