@@ -1,6 +1,9 @@
 const VIP_EMAILS = ["oop280712@gmail.com", "sawat2823@gmail.com"];
 let loggedInUserEmail = "";
 
+// ==========================================
+// 1. ระบบยืนยันตัวตน และสิทธิ์ VIP
+// ==========================================
 function switchAuthTo(target) {
     if (target === 'login') {
         document.getElementById('auth-register-modal').style.display = 'none';
@@ -85,6 +88,9 @@ function confirmSubscription() {
     }, 3500);
 }
 
+// ==========================================
+// 2. ระบบนาฬิกา และการสลับหน้าจอ (Navigation)
+// ==========================================
 function updateClock() {
     const now = new Date();
     const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -109,89 +115,35 @@ function goHome() {
     hideAllApps();
 }
 
-// 📦 ระบบใช้ JSZip แกะไฟล์ APK ของจริงและดึงทรัพยากร Layout ออกมาแสดงผล
-async function processRealApkFile(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const statusEl = document.getElementById('extraction-status');
-    statusEl.style.display = 'block';
-    statusEl.textContent = `Reading APK binary: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)...`;
-
-    try {
-        const zip = new JSZip();
-        const zipContent = await zip.loadAsync(file);
-
-        statusEl.textContent = "Extracting AndroidManifest.xml & Layout XML files...";
-
-        // ค้นหาไฟล์ Layout XML ภายใน APK
-        let layoutFiles = Object.keys(zipContent.files).filter(filename => filename.startsWith("res/layout/"));
-        let manifestFile = zipContent.file("AndroidManifest.xml");
-
-        setTimeout(() => {
-            statusEl.style.display = 'none';
-            const appName = file.name.replace('.apk', '');
-            
-            const container = document.getElementById('extracted-apps-container');
-            container.innerHTML = `
-                <div style="background:#1e293b; border-radius:10px; padding:12px; display:flex; align-items:center; justify-content:space-between;">
-                    <div>
-                        <h4 style="font-size:13px; color:#fff;">${appName}</h4>
-                        <p style="font-size:10px; color:#38bdf8;">Layouts Found: ${layoutFiles.length} files</p>
-                    </div>
-                    <button class="confirm-btn" style="width:auto; padding:6px 12px; font-size:11px;" onclick="renderRealApkDom('${appName}', ${JSON.stringify(layoutFiles)})">เปิดดูทรัพยากร</button>
-                </div>
-            `;
-            alert(`✅ ดึงทรัพยากรจากไฟล์ ${file.name} สำเร็จ! พบไฟล์ Layout ทั้งหมด ${layoutFiles.length} ไฟล์`);
-        }, 1500);
-
-    } catch (error) {
-        statusEl.textContent = "เกิดข้อผิดพลาดในการอ่านโครงสร้าง APK";
-        console.error(error);
-        alert("ไม่สามารถอ่านไฟล์ APK นี้ได้ ไฟล์อาจถูกเข้ารหัสหรือเสียหาย");
-    }
-}
-
-// เรนเดอร์โครงสร้างทรัพยากรที่ดึงมาลงใน Cloud Phone
-function renderRealApkDom(appName, layoutFiles) {
-    hideAllApps();
-    document.getElementById('active-apk-title').textContent = appName;
-    document.getElementById('apk-native-view').style.display = 'flex';
-
-    const domContainer = document.getElementById('apk-dom-container');
-    domContainer.innerHTML = `
-        <div style="padding: 20px; font-family: sans-serif; color: #333;">
-            <h2 style="color: #2563eb; margin-bottom: 10px;">📦 ${appName}</h2>
-            <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">รายชื่อไฟล์โครงสร้าง Layout XML และทรัพยากรที่สกัดจาก APK จริง:</p>
-            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; max-height: 350px; overflow-y: auto;">
-                <ul style="font-size: 11px; color: #1e293b; padding-left: 18px;">
-                    ${layoutFiles.length > 0 ? layoutFiles.map(path => `<li style="margin-bottom:6px; font-family:monospace;">${path}</li>`).join('') : '<li>ไม่พบโฟลเดอร์ res/layout โดยตรง แต่สกัดแพ็กเกจระบบสำเร็จ</li>'}
-                </ul>
-            </div>
-        </div>
-    `;
-}
-
-// ระบบดาวน์โหลดและติดตั้ง APK จำลองแบบสมจริง
+// ==========================================
+// 3. ระบบจำลองการดาวน์โหลดและติดตั้งแอปสมจริง 100%
+// ==========================================
 function startRealisticDownload() {
     const btn = document.getElementById('dl-btn');
-    btn.textContent = "กำลังดาวน์โหลด 0%";
     btn.disabled = true;
 
     let progress = 0;
+    let downloadedMB = 0;
+    const totalMB = 45.2;
+
     const interval = setInterval(() => {
-        progress += 25;
+        progress += 10;
+        downloadedMB = ((progress / 100) * totalMB).toFixed(1);
+        
         if (progress <= 100) {
-            btn.textContent = `กำลังดาวน์โหลด ${progress}%`;
+            btn.textContent = `กำลังโหลด ${progress}% (${downloadedMB}/${totalMB} MB)`;
         }
+
         if (progress >= 100) {
             clearInterval(interval);
-            btn.textContent = "ติดตั้งแล้ว";
+            btn.textContent = "รอการติดตั้ง...";
+            
+            // แสดงหน้าต่าง Package Installer ของ Android
             setTimeout(() => {
                 document.getElementById('android-install-dialog').style.display = 'flex';
-            }, 400);
+            }, 600);
         }
-    }, 3500);
+    }, 300);
 }
 
 function cancelInstallation() {
@@ -207,23 +159,77 @@ function proceedInstallation() {
     progressDialog.style.display = 'flex';
 
     document.getElementById('progress-title').textContent = "กำลังติดตั้ง...";
-    document.getElementById('progress-desc').textContent = "กำลังเขียนไฟล์ระบบ APK ลงหน่วยความจำ Flash...";
+    document.getElementById('progress-desc').textContent = "กำลังจัดสรรพื้นที่ความจำและเขียนไฟล์ APK...";
 
     setTimeout(() => {
-        document.getElementById('progress-title').textContent = "กำลังสแกนความปลอดภัย...";
-        document.getElementById('progress-desc').textContent = "Google Play Protect ตรวจสอบแล้ว ปลอดภัย 100%";
+        document.getElementById('progress-title').textContent = "ตรวจสอบความปลอดภัย...";
+        document.getElementById('progress-desc').textContent = "Google Play Protect: ปลอดภัย ไม่พบภัยคุกคาม";
     }, 1500);
 
     setTimeout(() => {
         progressDialog.style.display = 'none';
-        hideAllApps();
-        document.getElementById('apk-native-view').style.display = 'flex';
-        document.getElementById('active-apk-title').textContent = "Installed Application";
-        document.getElementById('apk-dom-container').innerHTML = `
-            <div style="padding: 20px; text-align: center;">
-                <h2 style="color: #10b981; margin-bottom: 10px;">✅ ติดตั้งแอปสำเร็จ</h2>
-                <p style="font-size: 12px; color: #64748b;">แอปพลิเคชันถูกรันผ่าน Cloud Engine พร้อมใช้งานเรียบร้อยแล้ว</p>
+        const btn = document.getElementById('dl-btn');
+        btn.textContent = "เปิด";
+        btn.disabled = false;
+        btn.onclick = () => launchAppWithSplash("Roblox Cloud");
+
+        // เพิ่มไอคอนลงหน้าจอหลัก Android Home
+        addNewAppToHome("Roblox", "🎮");
+        alert("✅ ติดตั้งแอปพลิเคชันลงใน Cloud Phone เรียบร้อยแล้ว!");
+    }, 3000);
+}
+
+// ==========================================
+// 4. ระบบจำลองการเปิดแอปพร้อม Splash Screen
+// ==========================================
+function launchAppWithSplash(appName) {
+    hideAllApps();
+    const activeView = document.getElementById('apk-native-view');
+    const activeTitle = document.getElementById('active-apk-title');
+    const domContainer = document.getElementById('apk-dom-container');
+
+    activeTitle.textContent = appName;
+    activeView.style.display = 'flex';
+
+    // 1. จำลอง Splash Screen (หน้าโหลดแอปค้างไว้ 1.5 วินาที)
+    domContainer.innerHTML = `
+        <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#0f172a; color:#fff;">
+            <div style="font-size:48px; margin-bottom:16px;" class="spinner"></div>
+            <h3 style="font-size:16px; color:#38bdf8;">${appName}</h3>
+            <p style="font-size:11px; color:#64748b; margin-top:8px;">Starting Android Runtime Engine...</p>
+        </div>
+    `;
+
+    // 2. โหลดหน้า UI หลักของแอปแบบ Native Look
+    setTimeout(() => {
+        domContainer.innerHTML = `
+            <div style="padding:16px; background:#1e293b; min-height:100%; color:#fff; font-family:sans-serif;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:12px; margin-bottom:16px;">
+                    <h3 style="font-size:16px; color:#38bdf8;">🎮 ${appName}</h3>
+                    <span style="font-size:10px; background:#10b981; color:#fff; padding:2px 8px; border-radius:10px;">FPS: 60 | RAM: 24GB</span>
+                </div>
+                
+                <div style="background:#0f172a; padding:14px; border-radius:10px; border:1px solid #334155; margin-bottom:12px;">
+                    <label style="display:block; font-size:11px; color:#94a3b8; margin-bottom:6px;">Username / Account ID:</label>
+                    <input type="text" value="khow_pun6767677" style="width:100%; padding:8px; background:#020617; border:1px solid #334155; border-radius:6px; color:#fff; font-size:12px; margin-bottom:10px;">
+                    <button style="width:100%; padding:10px; background:#2563eb; color:#fff; border:none; border-radius:6px; font-weight:bold; font-size:12px; cursor:pointer;" onclick="alert('✅ เข้าสู่ระบบสำเร็จ!')">เข้าสู่เซิร์ฟเวอร์</button>
+                </div>
             </div>
         `;
-    }, 2800);
+    }, 1500);
+}
+
+function addNewAppToHome(appName, icon) {
+    const grid = document.getElementById('home-app-grid');
+    if (!document.getElementById(`app-icon-${appName}`)) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'app-icon-wrapper';
+        wrapper.id = `app-icon-${appName}`;
+        wrapper.onclick = () => launchAppWithSplash(appName);
+        wrapper.innerHTML = `
+            <div class="app-icon" style="background:#7c3aed; color:#fff;">${icon}</div>
+            <span>${appName}</span>
+        `;
+        grid.appendChild(wrapper);
+    }
 }
