@@ -21,7 +21,6 @@ body { background: #020408; color: #e1e6ed; height: 100vh; display: flex; justif
 .app-grid { margin-top: auto; margin-bottom: 70px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 0 8px; }
 .app-icon-wrapper { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
 .app-icon { width: 54px; height: 54px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 22px; box-shadow: 0 6px 15px rgba(0,0,0,0.5); margin-bottom: 6px; }
-.app-icon.apk { background: #0284c7; color: #fff; }
 .app-icon.store { background: #fff; color: #01875f; }
 .app-icon.settings { background: #475569; color: #fff; }
 .app-icon-wrapper span { font-size: 11px; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
