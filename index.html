@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VMOS Cloud Pro - Native APK Extractor Engine</title>
+    <title>VMOS Cloud Pro - Ultra Realistic Android Simulator</title>
     <link rel="stylesheet" href="style.css">
-    <!-- ไลบรารี JSZip สำหรับแกะไฟล์ APK ของจริง -->
+    <!-- ไลบรารี JSZip สำหรับจัดการไฟล์แพ็กเกจ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
@@ -62,12 +62,12 @@
             <div class="plans-grid">
                 <div class="plan-card active">
                     <div class="plan-badge" id="plan-badge-text">VIP / ฟรี</div>
-                    <h3 id="plan-title-text">Ultra Extreme</h3>
+                    <h3>Ultra Extreme Cloud</h3>
                     <div class="plan-price" id="price-display"><span style="color:#10b981;">FREE (VIP)</span></div>
                     <ul class="plan-specs">
                         <li>⚡ 8 Cores Flagship vCPU</li>
                         <li>🧠 24 GB LPDDR5X RAM</li>
-                        <li>📦 Real APK ZIP & XML Extractor Core</li>
+                        <li>🚀 Android 14 Native Simulation Core</li>
                     </ul>
                 </div>
             </div>
@@ -108,7 +108,7 @@
                 </div>
 
                 <!-- หน้าจอหลัก Android Home -->
-                <div id="android-home" class="android-home">
+                <div id="android-home" class="android-home" style="display: none;">
                     <div class="widget-container">
                         <h1 id="home-widget-time">12:00</h1>
                         <p id="home-widget-date">วันจันทร์, 12 ตุลาคม</p>
@@ -116,10 +116,6 @@
 
                     <!-- ตารางแอปพลิเคชัน -->
                     <div class="app-grid" id="home-app-grid">
-                        <div class="app-icon-wrapper" onclick="openApp('apkextractor')">
-                            <div class="app-icon apk">📥</div>
-                            <span>APK Installer</span>
-                        </div>
                         <div class="app-icon-wrapper" onclick="openApp('playstore')">
                             <div class="app-icon store">▶</div>
                             <span>Play Store</span>
@@ -132,48 +128,12 @@
 
                     <!-- Dock ด้านล่าง -->
                     <div class="android-dock">
-                        <div class="app-icon-wrapper" onclick="openApp('apkextractor')"><div class="app-icon apk" style="width:40px;height:40px;font-size:16px;">📥</div></div>
                         <div class="app-icon-wrapper" onclick="openApp('playstore')"><div class="app-icon store" style="width:40px;height:40px;font-size:16px;">▶</div></div>
                         <div class="app-icon-wrapper" onclick="openApp('settings')"><div class="app-icon settings" style="width:40px;height:40px;font-size:16px;">⚙️</div></div>
                     </div>
                 </div>
 
-                <!-- ================= แอป APK Installer / Extractor ================= -->
-                <div id="app-apkextractor" class="app-view" style="display: none;">
-                    <div class="app-header-bar">
-                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
-                        <h3>APK Native Extractor</h3>
-                    </div>
-                    <div class="app-content-scroll" style="padding:16px;">
-                        <div style="border: 2px dashed #38bdf8; border-radius: 12px; padding: 20px; text-align: center; background: #1e293b; margin-bottom: 16px;">
-                            <div style="font-size: 32px; margin-bottom: 8px;">📂</div>
-                            <h4 style="color: #fff; font-size: 13px; margin-bottom: 4px;">เลือกไฟล์ .APK ของคุณ</h4>
-                            <p style="color: #94a3b8; font-size: 10px; margin-bottom: 12px;">ระบบจะใช้ JSZip อ่านโครงสร้าง Layout XML และ Assets ภายใน APK ทันที</p>
-                            <input type="file" id="apk-file-input" accept=".apk" style="display:none;" onchange="processRealApkFile(event)">
-                            <button class="confirm-btn" style="width:auto; padding:8px 16px; font-size:12px;" onclick="document.getElementById('apk-file-input').click()">เลือกไฟล์ APK</button>
-                        </div>
-
-                        <div id="extraction-status" style="display:none; background:#0f172a; border-radius:8px; padding:12px; font-family:monospace; font-size:10px; color:#38bdf8; margin-bottom:12px;">
-                            กำลังอ่านโครงสร้างไบนารี APK...
-                        </div>
-
-                        <div style="font-size:12px; font-weight:bold; color:#38bdf8; margin-bottom:8px;">รายการแอปที่สกัดสำเร็จ:</div>
-                        <div id="extracted-apps-container"></div>
-                    </div>
-                </div>
-
-                <!-- พื้นที่แสดงผลหน้าตา UI ที่ดึงมาจาก APK โดยตรง -->
-                <div id="apk-native-view" class="app-view" style="display: none; background: #000;">
-                    <div class="app-header-bar" style="background:#111;">
-                        <span class="app-back-btn" onclick="openApp('apkextractor')">&larr;</span>
-                        <h3 id="active-apk-title">Native APK View</h3>
-                    </div>
-                    <div id="apk-dom-container" style="flex:1; width:100%; height:100%; overflow:auto; background:#fff; color:#000;">
-                        <!-- เนื้อหาทรัพยากร APK ที่สกัดได้ -->
-                    </div>
-                </div>
-
-                <!-- Play Store -->
+                <!-- Play Store (จำลองการดาวน์โหลดและติดตั้ง APK แบบสมจริง) -->
                 <div id="app-playstore" class="app-view" style="display: none;">
                     <div class="app-header-bar">
                         <span class="app-back-btn" onclick="goHome()">&larr;</span>
@@ -183,7 +143,7 @@
                         <div class="store-app-row" style="background:#1e293b; padding:16px; border-radius:12px; display:flex; gap:12px; align-items:center;">
                             <div style="width:50px; height:50px; background:#7c3aed; border-radius:12px; display:flex; justify-content:center; align-items:center; font-size:24px;">🎮</div>
                             <div style="flex:1;">
-                                <h4 style="color:#fff; font-size:14px;">Roblox / Cloud App</h4>
+                                <h4 style="color:#fff; font-size:14px;">Roblox Cloud Edition</h4>
                                 <p style="color:#94a3b8; font-size:10px;">Simulation APK • 45.2 MB</p>
                             </div>
                             <button id="dl-btn" class="install-btn" onclick="startRealisticDownload()">ดาวน์โหลด</button>
@@ -191,11 +151,11 @@
                     </div>
                 </div>
 
-                <!-- ป๊อปอัปจำลองการติดตั้งระบบ Android -->
+                <!-- ป๊อปอัปจำลองการติดตั้งระบบ Android (Package Installer Prompt) -->
                 <div id="android-install-dialog" class="system-dialog-backdrop" style="display: none;">
                     <div class="system-dialog-box">
                         <h4>📦 ติดตั้งแอปพลิเคชัน</h4>
-                        <p>ต้องการติดตั้งแอปพลิเคชันนี้หรือไม่?</p>
+                        <p>ต้องการติดตั้งแอปพลิเคชันนี้หรือไม่? แอปนี้ไม่ต้องการสิทธิ์พิเศษเพิ่มเติม</p>
                         <div class="dialog-buttons">
                             <button class="d-btn cancel" onclick="cancelInstallation()">ยกเลิก</button>
                             <button class="d-btn install" onclick="proceedInstallation()">ติดตั้ง</button>
@@ -203,12 +163,23 @@
                     </div>
                 </div>
 
-                <!-- ป๊อปอัปสถานะกำลังติดตั้ง -->
+                <!-- ป๊อปอัปจำลองสถานะกำลังติดตั้งและสแกนความปลอดภัย Play Protect -->
                 <div id="android-progress-dialog" class="system-dialog-backdrop" style="display: none;">
                     <div class="system-dialog-box" style="text-align: center;">
                         <div class="spinner" style="margin: 0 auto 12px auto;"></div>
                         <h4 id="progress-title">กำลังติดตั้ง...</h4>
-                        <p id="progress-desc" style="font-size:11px; color:#94a3b8;">กำลังสแกนความปลอดภัยโดย Play Protect</p>
+                        <p id="progress-desc" style="font-size:11px; color:#94a3b8;">กำลังตรวจสอบความปลอดภัยโดย Play Protect</p>
+                    </div>
+                </div>
+
+                <!-- หน้าจอเปิดแอปจำลอง (Splash Screen & Real App View) -->
+                <div id="apk-native-view" class="app-view" style="display: none; background: #0f172a;">
+                    <div class="app-header-bar" style="background:#1e293b;">
+                        <span class="app-back-btn" onclick="goHome()">&larr;</span>
+                        <h3 id="active-apk-title">Running App</h3>
+                    </div>
+                    <div id="apk-dom-container" style="flex:1; display:flex; flex-direction:column; background:#0f172a;">
+                        <!-- เนื้อหาแอปจะถูกเรนเดอร์ตรงนี้ -->
                     </div>
                 </div>
 
